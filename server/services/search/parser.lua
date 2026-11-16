@@ -1,7 +1,7 @@
 --- Pure parsing helpers for the search providers (no FiveM natives, covered by tests/lua).
-FiveFY.SearchParser = {}
+FiveFly.SearchParser = {}
 
-local Parser = FiveFY.SearchParser
+local Parser = FiveFly.SearchParser
 
 local HTML_ENTITIES <const> = {
     ["&amp;"] = "&",

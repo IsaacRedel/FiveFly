@@ -1,5 +1,5 @@
 /* Design tokens. Accent: sunset coral; secondary: magenta, used only in the brand mark and gradients. */
-.fivefy-app {
+.fivefly-app {
     --bg: #0c0b0e;
     --panel: #16141a;
     --panel-strong: #1f1c24;
@@ -20,7 +20,7 @@
     color: var(--text);
 }
 
-.fivefy-screen {
+.fivefly-screen {
     position: absolute;
     inset: 0;
     overflow-y: auto;
@@ -30,12 +30,12 @@
     animation: view-enter 160ms ease-out;
 }
 
-.fivefy-screen::-webkit-scrollbar,
+.fivefly-screen::-webkit-scrollbar,
 .recent-strip::-webkit-scrollbar {
     display: none;
 }
 
-.fivefy-screen--player {
+.fivefly-screen--player {
     padding-bottom: 4rem;
     overflow-y: hidden;
 }

@@ -4,9 +4,9 @@ local function load(options)
     local runtime = H.reset()
     options = options or {}
 
-    FiveFY.Database = { ready = options.dbReady ~= false }
-    FiveFY.Permissions = { CanUse = function() return options.allowed ~= false end }
-    FiveFY.Identity = {
+    FiveFly.Database = { ready = options.dbReady ~= false }
+    FiveFly.Permissions = { CanUse = function() return options.allowed ~= false end }
+    FiveFly.Identity = {
         GetUserId = function(src)
             if options.noIdentity then
                 return nil
@@ -15,22 +15,22 @@ local function load(options)
             return src + 100
         end
     }
-    FiveFY.RateLimit = nil
+    FiveFly.RateLimit = nil
     dofile("server/services/rate_limit.lua")
     dofile("server/main.lua")
 
-    FiveFY.Actions.Register("test.echo", {
+    FiveFly.Actions.Register("test.echo", {
         rateLimit = 500,
         handler = function(ctx, payload) return { userId = ctx.userId, value = payload.value } end
     })
-    FiveFY.Actions.Register("test.fail", {
+    FiveFly.Actions.Register("test.fail", {
         handler = function() return nil, "custom_error" end
     })
-    FiveFY.Actions.Register("test.crash", {
+    FiveFly.Actions.Register("test.crash", {
         handler = function() error("boom") end
     })
 
-    return FiveFY.Actions, runtime
+    return FiveFly.Actions, runtime
 end
 
 return {
@@ -90,16 +90,16 @@ return {
             local _, runtime = load()
             runtime.now = 5000
 
-            H.trigger(runtime.netEvents["fivefy:server:request"], 9, "req-1", "test.echo", { value = 1 })
+            H.trigger(runtime.netEvents["fivefly:server:request"], 9, "req-1", "test.echo", { value = 1 })
             local event = runtime.clientEvents[1]
 
-            H.eq(event.name, "fivefy:client:response", "response event")
+            H.eq(event.name, "fivefly:client:response", "response event")
             H.eq(event.target, 9, "sent to the caller")
             H.eq(event.args[1], "req-1", "request id")
             H.eq(event.args[2].ok, true, "envelope")
 
             runtime.clientEvents = {}
-            H.trigger(runtime.netEvents["fivefy:server:request"], 9, "", "test.echo", {})
+            H.trigger(runtime.netEvents["fivefly:server:request"], 9, "", "test.echo", {})
             H.eq(#runtime.clientEvents, 0, "empty request id ignored")
         end
     }

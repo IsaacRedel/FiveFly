@@ -5,7 +5,7 @@ local function load(runtime)
         dofile(("bridge/server/%s.lua"):format(file))
     end
 
-    return FiveFY.Bridge, runtime
+    return FiveFly.Bridge, runtime
 end
 
 return {
@@ -63,7 +63,7 @@ return {
         end
     },
     {
-        name = "a framework started after fivefy replaces standalone",
+        name = "a framework started after fivefly replaces standalone",
         run = function()
             local runtime = H.reset()
             runtime.identifiers = { [1] = { "license:zzz" } }

@@ -21,7 +21,7 @@ body:
   - type: input
     id: version
     attributes:
-      label: FiveFY version
+      label: FiveFly version
       placeholder: "1.0.0"
     validations:
       required: true

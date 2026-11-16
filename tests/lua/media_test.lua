@@ -3,7 +3,7 @@ local H = require("helpers")
 local function load()
     H.reset()
     dofile("server/services/media.lua")
-    return FiveFY.Media
+    return FiveFly.Media
 end
 
 return {

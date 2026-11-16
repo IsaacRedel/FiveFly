@@ -1,8 +1,8 @@
 --- Maps framework identifiers ("qb:ABC123", "vrp:42", "license:...") to internal numeric user ids.
 --- Internal ids are what the database and the UI use, so framework identifiers never reach other players.
-FiveFY.Identity = {}
+FiveFly.Identity = {}
 
-local Identity = FiveFY.Identity
+local Identity = FiveFly.Identity
 local idByIdentifier = {}
 
 ---@param identifier string
@@ -14,9 +14,9 @@ local function resolveIdentifier(identifier)
         return cached
     end
 
-    MySQL.insert.await("INSERT IGNORE INTO fivefy_users (identifier) VALUES (?)", { identifier })
+    MySQL.insert.await("INSERT IGNORE INTO fivefly_users (identifier) VALUES (?)", { identifier })
 
-    local rows = MySQL.query.await("SELECT id FROM fivefy_users WHERE identifier = ? LIMIT 1", { identifier }) or {}
+    local rows = MySQL.query.await("SELECT id FROM fivefly_users WHERE identifier = ? LIMIT 1", { identifier }) or {}
     local userId = tonumber(rows[1] and rows[1].id)
 
     if userId then
@@ -31,7 +31,7 @@ end
 ---@param source integer
 ---@return integer|nil
 function Identity.GetUserId(source)
-    local identifier = FiveFY.Bridge.GetIdentifier(source)
+    local identifier = FiveFly.Bridge.GetIdentifier(source)
 
     if not identifier then
         return nil

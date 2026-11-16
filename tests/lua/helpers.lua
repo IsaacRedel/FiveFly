@@ -34,7 +34,7 @@ function Helpers.reset()
         logs = {}
     }
 
-    _G.FiveFY = nil
+    _G.FiveFly = nil
     _G.Config = nil
     _G.source = nil
     _G.module = nil
@@ -45,7 +45,7 @@ function Helpers.reset()
         return setmetatable({ x = x, y = y, z = z }, Vector)
     end
 
-    _G.GetCurrentResourceName = function() return "fivefy" end
+    _G.GetCurrentResourceName = function() return "fivefly" end
     _G.GetGameTimer = function() return runtime.now or 0 end
     _G.CreateThread = function() runtime.threads = runtime.threads + 1 end
     _G.Wait = function() end
@@ -82,6 +82,7 @@ function Helpers.reset()
 
     dofile("config.lua")
     dofile("shared/utils.lua")
+    dofile("shared/locale.lua")
 
     return runtime
 end

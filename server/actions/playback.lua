@@ -1,5 +1,5 @@
-local Actions = FiveFY.Actions
-local Sessions = FiveFY.Sessions
+local Actions = FiveFly.Actions
+local Sessions = FiveFly.Sessions
 
 local PLAYBACK_MS <const> = Config.RateLimits.PlaybackMs
 

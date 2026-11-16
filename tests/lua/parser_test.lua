@@ -3,7 +3,7 @@ local H = require("helpers")
 local function load()
     H.reset()
     dofile("server/services/search/parser.lua")
-    return FiveFY.SearchParser
+    return FiveFly.SearchParser
 end
 
 return {

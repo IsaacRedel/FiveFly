@@ -66,7 +66,7 @@ export const FALLBACK_INITIAL_STATE: InitialState = {
 };
 
 function getPreviewFallbacks() {
-    return (window as any).__FIVEFY_PREVIEW__ || {};
+    return (window as any).__FIVEFLY_PREVIEW__ || {};
 }
 
 function fallbackValue<T>(key: string, productionFallback: T): T {

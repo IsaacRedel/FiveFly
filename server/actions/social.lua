@@ -1,5 +1,5 @@
-local Actions = FiveFY.Actions
-local Library = FiveFY.Library
+local Actions = FiveFly.Actions
+local Library = FiveFly.Library
 
 local WRITE_MS <const> = Config.RateLimits.LibraryWriteMs
 
@@ -27,7 +27,7 @@ Actions.Register("social.profile.update", {
 Actions.Register("social.follow.toggle", {
     rateLimit = WRITE_MS,
     handler = function(ctx, payload)
-        local following, err = FiveFY.Repo.Profiles.ToggleFollow(ctx.userId, payload.userId)
+        local following, err = FiveFly.Repo.Profiles.ToggleFollow(ctx.userId, payload.userId)
 
         if following == nil then
             return nil, err

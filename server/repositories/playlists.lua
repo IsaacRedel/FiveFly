@@ -1,8 +1,8 @@
-FiveFY.Repo = FiveFY.Repo or {}
-FiveFY.Repo.Playlists = {}
+FiveFly.Repo = FiveFly.Repo or {}
+FiveFly.Repo.Playlists = {}
 
-local Playlists = FiveFY.Repo.Playlists
-local Utils = FiveFY.Utils
+local Playlists = FiveFly.Repo.Playlists
+local Utils = FiveFly.Utils
 
 local SHARE_CODE_ALPHABET <const> = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
 
@@ -54,7 +54,7 @@ local function generateShareCode()
         end
 
         local code = table.concat(chars)
-        local taken = MySQL.query.await("SELECT 1 FROM fivefy_playlists WHERE share_code = ? LIMIT 1", { code }) or {}
+        local taken = MySQL.query.await("SELECT 1 FROM fivefly_playlists WHERE share_code = ? LIMIT 1", { code }) or {}
 
         if not taken[1] then
             return code
@@ -65,20 +65,20 @@ local function generateShareCode()
 end
 
 local function isOwner(userId, playlistId)
-    local rows = MySQL.query.await("SELECT 1 FROM fivefy_playlists WHERE id = ? AND user_id = ? LIMIT 1", { playlistId, userId }) or {}
+    local rows = MySQL.query.await("SELECT 1 FROM fivefly_playlists WHERE id = ? AND user_id = ? LIMIT 1", { playlistId, userId }) or {}
     return rows[1] ~= nil
 end
 
 local function countPlaylists(userId)
-    local rows = MySQL.query.await("SELECT COUNT(*) AS total FROM fivefy_playlists WHERE user_id = ?", { userId }) or {}
+    local rows = MySQL.query.await("SELECT COUNT(*) AS total FROM fivefly_playlists WHERE user_id = ?", { userId }) or {}
     return tonumber(rows[1] and rows[1].total) or 0
 end
 
 local function get(userId, playlistId)
     local rows = MySQL.query.await([[
         SELECT p.id, p.user_id, p.name, p.cover, p.share_code, p.visibility,
-               (SELECT COUNT(*) FROM fivefy_playlist_tracks t WHERE t.playlist_id = p.id) AS track_count
-        FROM fivefy_playlists p
+               (SELECT COUNT(*) FROM fivefly_playlist_tracks t WHERE t.playlist_id = p.id) AS track_count
+        FROM fivefly_playlists p
         WHERE p.id = ? AND p.user_id = ?
         LIMIT 1
     ]], { playlistId, userId }) or {}
@@ -90,8 +90,8 @@ end
 function Playlists.GetByUser(userId)
     return mapRows(MySQL.query.await([[
         SELECT p.id, p.user_id, p.name, p.cover, p.share_code, p.visibility, COUNT(t.video_id) AS track_count
-        FROM fivefy_playlists p
-        LEFT JOIN fivefy_playlist_tracks t ON t.playlist_id = p.id
+        FROM fivefly_playlists p
+        LEFT JOIN fivefly_playlist_tracks t ON t.playlist_id = p.id
         WHERE p.user_id = ?
         GROUP BY p.id, p.user_id, p.name, p.cover, p.share_code, p.visibility, p.created_at
         ORDER BY p.created_at DESC
@@ -111,9 +111,9 @@ function Playlists.GetPublicByUsers(userIds)
     local rows = MySQL.query.await(([[
         SELECT p.id, p.user_id, p.name, p.cover, p.share_code, p.visibility, pr.display_name AS owner_name,
                COUNT(t.video_id) AS track_count
-        FROM fivefy_playlists p
-        LEFT JOIN fivefy_playlist_tracks t ON t.playlist_id = p.id
-        LEFT JOIN fivefy_profiles pr ON pr.user_id = p.user_id
+        FROM fivefly_playlists p
+        LEFT JOIN fivefly_playlist_tracks t ON t.playlist_id = p.id
+        LEFT JOIN fivefly_profiles pr ON pr.user_id = p.user_id
         WHERE p.visibility = 'public' AND p.user_id IN (%s)
         GROUP BY p.id, p.user_id, p.name, p.cover, p.share_code, p.visibility, pr.display_name, p.created_at
         ORDER BY p.created_at DESC
@@ -140,9 +140,9 @@ function Playlists.SearchPublic(query)
     return mapRows(MySQL.query.await([[
         SELECT p.id, p.user_id, p.name, p.cover, p.share_code, p.visibility, pr.display_name AS owner_name,
                COUNT(t.video_id) AS track_count
-        FROM fivefy_playlists p
-        LEFT JOIN fivefy_playlist_tracks t ON t.playlist_id = p.id
-        LEFT JOIN fivefy_profiles pr ON pr.user_id = p.user_id
+        FROM fivefly_playlists p
+        LEFT JOIN fivefly_playlist_tracks t ON t.playlist_id = p.id
+        LEFT JOIN fivefly_profiles pr ON pr.user_id = p.user_id
         WHERE p.visibility = 'public' AND (p.name LIKE ? OR pr.display_name LIKE ?)
         GROUP BY p.id, p.user_id, p.name, p.cover, p.share_code, p.visibility, pr.display_name, p.created_at
         ORDER BY p.created_at DESC
@@ -164,7 +164,7 @@ function Playlists.Create(userId, name)
 
     local shareCode = generateShareCode()
     local id = MySQL.insert.await([[
-        INSERT INTO fivefy_playlists (user_id, name, share_code) VALUES (?, ?, ?)
+        INSERT INTO fivefly_playlists (user_id, name, share_code) VALUES (?, ?, ?)
     ]], { userId, safeName, shareCode })
 
     return get(userId, id), nil
@@ -182,8 +182,8 @@ function Playlists.Delete(userId, playlistId)
         return false, "playlist_not_found"
     end
 
-    MySQL.update.await("DELETE FROM fivefy_playlist_tracks WHERE playlist_id = ?", { id })
-    MySQL.update.await("DELETE FROM fivefy_playlists WHERE id = ? AND user_id = ?", { id, userId })
+    MySQL.update.await("DELETE FROM fivefly_playlist_tracks WHERE playlist_id = ?", { id })
+    MySQL.update.await("DELETE FROM fivefly_playlists WHERE id = ? AND user_id = ?", { id, userId })
 
     return true, nil
 end
@@ -200,9 +200,9 @@ function Playlists.GetTracks(userId, playlistId)
         return nil, "playlist_not_found"
     end
 
-    return FiveFY.Repo.Tracks.MapRows(MySQL.query.await([[
+    return FiveFly.Repo.Tracks.MapRows(MySQL.query.await([[
         SELECT video_id, title, thumbnail, duration, author
-        FROM fivefy_playlist_tracks
+        FROM fivefly_playlist_tracks
         WHERE playlist_id = ?
         ORDER BY position ASC, created_at ASC
     ]], { id })), nil
@@ -224,7 +224,7 @@ function Playlists.SetCover(userId, playlistId, cover)
         return false, "playlist_not_found"
     end
 
-    MySQL.update.await("UPDATE fivefy_playlists SET cover = ? WHERE id = ? AND user_id = ?", { cover, id, userId })
+    MySQL.update.await("UPDATE fivefly_playlists SET cover = ? WHERE id = ? AND user_id = ?", { cover, id, userId })
 
     return true, nil
 end
@@ -242,7 +242,7 @@ function Playlists.SetVisibility(userId, playlistId, visibility)
     end
 
     local safeVisibility = normalizeVisibility(visibility)
-    MySQL.update.await("UPDATE fivefy_playlists SET visibility = ? WHERE id = ? AND user_id = ?", { safeVisibility, id, userId })
+    MySQL.update.await("UPDATE fivefly_playlists SET visibility = ? WHERE id = ? AND user_id = ?", { safeVisibility, id, userId })
 
     return safeVisibility, nil
 end
@@ -256,7 +256,7 @@ function Playlists.ImportByCode(userId, shareCode)
         return nil, "invalid_share_code"
     end
 
-    local rows = MySQL.query.await("SELECT id, name, cover FROM fivefy_playlists WHERE share_code = ? LIMIT 1", { code }) or {}
+    local rows = MySQL.query.await("SELECT id, name, cover FROM fivefly_playlists WHERE share_code = ? LIMIT 1", { code }) or {}
     local source = rows[1]
 
     if not source then
@@ -270,13 +270,13 @@ function Playlists.ImportByCode(userId, shareCode)
     local baseName = Utils.Trim(source.name or "Playlist"):sub(1, Config.Library.MaxPlaylistNameLength - 7)
     local name = (baseName ~= "" and baseName or "Playlist") .. " (copy)"
     local newId = MySQL.insert.await([[
-        INSERT INTO fivefy_playlists (user_id, name, cover, share_code) VALUES (?, ?, ?, ?)
+        INSERT INTO fivefly_playlists (user_id, name, cover, share_code) VALUES (?, ?, ?, ?)
     ]], { userId, name, Utils.NormalizeHttpUrl(source.cover), generateShareCode() })
 
     MySQL.insert.await([[
-        INSERT INTO fivefy_playlist_tracks (playlist_id, video_id, title, thumbnail, duration, author, position)
+        INSERT INTO fivefly_playlist_tracks (playlist_id, video_id, title, thumbnail, duration, author, position)
         SELECT ?, video_id, title, thumbnail, duration, author, position
-        FROM fivefy_playlist_tracks
+        FROM fivefly_playlist_tracks
         WHERE playlist_id = ?
         ORDER BY position ASC, created_at ASC
         LIMIT ?
@@ -299,7 +299,7 @@ function Playlists.AddTrack(userId, playlistId, track)
     end
 
     MySQL.insert.await([[
-        INSERT INTO fivefy_playlist_tracks (playlist_id, video_id, title, thumbnail, duration, author, position)
+        INSERT INTO fivefly_playlist_tracks (playlist_id, video_id, title, thumbnail, duration, author, position)
         VALUES (?, ?, ?, ?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE
             title = VALUES(title),
@@ -309,7 +309,7 @@ function Playlists.AddTrack(userId, playlistId, track)
     ]], { playlist.id, track.videoId, track.title, track.thumbnail, track.duration, track.author, playlist.trackCount + 1 })
 
     if playlist.cover == "" and track.thumbnail ~= "" then
-        MySQL.update.await("UPDATE fivefy_playlists SET cover = ? WHERE id = ? AND user_id = ?", { track.thumbnail, playlist.id, userId })
+        MySQL.update.await("UPDATE fivefly_playlists SET cover = ? WHERE id = ? AND user_id = ?", { track.thumbnail, playlist.id, userId })
     end
 
     return true, nil
@@ -332,7 +332,7 @@ function Playlists.RemoveTrack(userId, playlistId, videoId)
         return false, "playlist_not_found"
     end
 
-    MySQL.update.await("DELETE FROM fivefy_playlist_tracks WHERE playlist_id = ? AND video_id = ?", { id, safeVideoId })
+    MySQL.update.await("DELETE FROM fivefly_playlist_tracks WHERE playlist_id = ? AND video_id = ?", { id, safeVideoId })
 
     return true, nil
 end

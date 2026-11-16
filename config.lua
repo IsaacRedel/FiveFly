@@ -1,67 +1,87 @@
 Config = {}
 
 --[[
-    FiveFY configuration.
+    FiveFly configuration / Configuração do FiveFly
 
-    Secrets (YouTube Data API key, Fivemanage key) are NOT configured here.
-    Set them as server convars in server.cfg, so they never reach clients:
+    EN: Secrets (YouTube Data API key, Fivemanage key) are NOT configured here. Set them as server
+        convars in server.cfg, so they never reach clients.
+    PT: Chaves (YouTube Data API, Fivemanage) NÃO ficam aqui. Defina-as como convars no server.cfg,
+        assim elas nunca chegam aos clients.
 
-        set fivefy_youtube_key "YOUR_YOUTUBE_DATA_API_V3_KEY"
-        set fivefy_fivemanage_key "YOUR_FIVEMANAGE_IMAGE_KEY"
+        set fivefly_youtube_key "YOUR_YOUTUBE_DATA_API_V3_KEY"
+        set fivefly_fivemanage_key "YOUR_FIVEMANAGE_IMAGE_KEY"
 ]]
 
--- UI language: "en" or "pt-BR".
+-- EN: Language of the whole resource (UI, console messages, app and key binding texts): "en" or "pt-BR".
+-- PT: Idioma de todo o resource (interface, mensagens do console, textos do app e da tecla): "en" ou "pt-BR".
 Config.Locale = "en"
 
--- Print detailed logs to the server/client console.
+-- EN: Print detailed logs to the server/client console.
+-- PT: Mostra logs detalhados no console do servidor e do client.
 Config.Debug = false
 
--- Framework used to identify players: "auto", "qbx", "qb", "esx", "vrp" or "standalone".
--- "auto" picks the first started framework in that order and falls back to standalone (Rockstar license).
+-- EN: Framework used to identify players: "auto", "qbx", "qb", "esx", "vrp" or "standalone".
+--     "auto" picks the first started framework in that order and falls back to standalone (Rockstar license).
+--     A specific value never falls back: FiveFly waits for that framework to start.
+-- PT: Framework usado para identificar os jogadores: "auto", "qbx", "qb", "esx", "vrp" ou "standalone".
+--     "auto" usa o primeiro framework iniciado, nessa ordem, e por último o standalone (license da Rockstar).
+--     Um valor específico nunca troca de framework: o FiveFly espera ele iniciar.
 Config.Framework = "auto"
 
--- Restrict the app to players with a permission.
--- vRP: vRP.hasPermission | QBCore: QBCore.Functions.HasPermission | ESX: player group | others: ACE.
+-- EN: Restrict the app to players with a permission.
+--     vRP: vRP.hasPermission | QBCore: QBCore.Functions.HasPermission | ESX: player group | others: ACE.
+-- PT: Restringe o app a jogadores com uma permissão.
+--     vRP: vRP.hasPermission | QBCore: QBCore.Functions.HasPermission | ESX: grupo do jogador | outros: ACE.
 Config.RequirePermission = false
-Config.Permission = "fivefy.use"
+Config.Permission = "fivefly.use"
 
 ---------------------------------------------------------------------------------------------------
--- Phone app (lb-phone). Optional: without lb-phone, FiveFY runs through the panel only.
+-- EN: Phone app (lb-phone). Optional: without lb-phone, FiveFly runs through the panel only.
+-- PT: App do celular (lb-phone). Opcional: sem o lb-phone, o FiveFly funciona só pelo painel.
 ---------------------------------------------------------------------------------------------------
 Config.Phone = {
     Enabled = true,
     Resource = "lb-phone",
-    Identifier = "fivefy",
-    Name = "FiveFY",
-    Description = "Music for your city.",
-    Developer = "FiveFY",
+    Identifier = "fivefly",
+    Name = "FiveFly",
+    -- EN: nil = text from Config.Locale. Set a string to override it.
+    -- PT: nil = texto do Config.Locale. Defina um texto para substituir.
+    Description = nil,
+    Developer = "FiveFly",
     DefaultApp = true,
     Size = 24500,
-    -- Stop playback when the player no longer has a phone item (lb-phone HasPhoneItem).
+    -- EN: Stop music started from the phone when the player no longer has a phone item (lb-phone HasPhoneItem).
+    -- PT: Para a música iniciada pelo celular quando o jogador não tem mais o item de celular (HasPhoneItem do lb-phone).
     StopWithoutPhoneItem = true
 }
 
 ---------------------------------------------------------------------------------------------------
--- Desktop panel: a larger player opened by command or key binding.
+-- EN: Desktop panel: a larger player opened by command or key binding.
+-- PT: Painel desktop: um player maior, aberto por comando ou tecla.
 ---------------------------------------------------------------------------------------------------
 Config.Panel = {
     Enabled = true,
-    Command = "fivefy",
-    -- Default key binding (players can change it in Settings > Key Bindings > FiveM). "" = no default key.
+    Command = "fivefly",
+    -- EN: Default key (players can change it in Settings > Key Bindings > FiveM). "" = no default key.
+    -- PT: Tecla padrão (o jogador pode trocar em Configurações > Atalhos > FiveM). "" = sem tecla padrão.
     DefaultKey = "",
-    KeyDescription = "Open FiveFY",
-    -- Client-side hook. Return false to block opening (e.g. while handcuffed).
+    -- EN: nil = text from Config.Locale. / PT: nil = texto do Config.Locale.
+    KeyDescription = nil,
+    -- EN: Client-side hook. Return false to block opening (e.g. while handcuffed).
+    -- PT: Hook do client. Retorne false para bloquear a abertura (por exemplo, quando algemado).
     CanOpen = function()
         return not IsEntityDead(PlayerPedId())
     end
 }
 
 ---------------------------------------------------------------------------------------------------
--- Music search.
+-- EN: Music search. / PT: Busca de músicas.
 ---------------------------------------------------------------------------------------------------
 Config.Search = {
-    -- "auto": YouTube Data API when the fivefy_youtube_key convar is set, scraping otherwise.
-    -- "youtube_api": official API only. "scrape": HTML scraping only (experimental, may break).
+    -- EN: "auto": YouTube Data API when the fivefly_youtube_key convar is set, scraping otherwise.
+    --     "youtube_api": official API only. "scrape": HTML scraping only (experimental, may break).
+    -- PT: "auto": YouTube Data API quando a convar fivefly_youtube_key estiver definida, scraping caso contrário.
+    --     "youtube_api": só a API oficial. "scrape": só scraping do HTML (experimental, pode quebrar).
     Provider = "auto",
     MinLength = 3,
     MaxLength = 100,
@@ -69,15 +89,18 @@ Config.Search = {
     CacheTtlSeconds = 21600,
     CacheMaxEntries = 500,
     CooldownMs = 1500,
-    -- Region and language hints sent to YouTube.
-    RegionCode = "US",
-    Language = "en"
+    -- EN: Region and language hints sent to YouTube. nil = from Config.Locale (en: US/en, pt-BR: BR/pt).
+    -- PT: Região e idioma enviados ao YouTube. nil = conforme o Config.Locale (en: US/en, pt-BR: BR/pt).
+    RegionCode = nil,
+    Language = nil
 }
 
 Config.Playback = {
     MaxQueueSize = 50
 }
 
+-- EN: Minimum interval between requests of the same kind, per player (ms).
+-- PT: Intervalo mínimo entre requisições do mesmo tipo, por jogador (ms).
 Config.RateLimits = {
     LibraryReadMs = 750,
     LibraryWriteMs = 500,
@@ -94,16 +117,19 @@ Config.Library = {
 }
 
 ---------------------------------------------------------------------------------------------------
--- Images (avatars and playlist covers).
+-- EN: Images (avatars and playlist covers). / PT: Imagens (avatares e capas de playlist).
 ---------------------------------------------------------------------------------------------------
 Config.Media = {
-    -- Re-upload images from temporary hosts (e.g. Discord CDN links expire) to Fivemanage.
+    -- EN: Re-upload images from temporary hosts (e.g. Discord CDN links expire) to Fivemanage.
+    -- PT: Reenvia ao Fivemanage imagens de hosts temporários (links do CDN do Discord expiram, por exemplo).
     ReuploadExternal = true,
     RequireReuploadForTemporaryHosts = true,
-    -- When the fivefy_fivemanage_key convar is empty, read the Image key from lb-phone's server/apiKeys.lua.
+    -- EN: When the fivefly_fivemanage_key convar is empty, read the Image key from lb-phone's server/apiKeys.lua.
+    -- PT: Se a convar fivefly_fivemanage_key estiver vazia, usa a chave Image do server/apiKeys.lua do lb-phone.
     UseLbPhoneApiKey = true,
     MaxDownloadBytes = 8 * 1024 * 1024,
-    -- When lb-phone is started, its own whitelist/blacklist settings take precedence over these.
+    -- EN: When lb-phone is started, its own whitelist/blacklist settings take precedence over these.
+    -- PT: Com o lb-phone iniciado, as whitelists/blacklists dele têm prioridade sobre estas.
     ExternalWhitelistedHostnames = {
         "cdn.discordapp.com",
         "media.discordapp.net"
@@ -129,30 +155,38 @@ Config.Media = {
 }
 
 ---------------------------------------------------------------------------------------------------
--- Audio outputs.
+-- EN: Audio outputs. / PT: Saídas de áudio.
 ---------------------------------------------------------------------------------------------------
 Config.Outputs = {
     Default = "private",
     Allowed = {
-        private = true, -- only the player hears it
-        prop = true,    -- portable speaker carried by the player
-        vehicle = true, -- current/last vehicle (or a sound-system trailer)
+        private = true, -- EN: only the player hears it / PT: só o jogador escuta
+        prop = true,    -- EN: portable speaker carried by the player / PT: caixa de som portátil na mão
+        vehicle = true, -- EN: current/last vehicle (or a sound-system trailer) / PT: veículo atual/último (ou carreta de som)
         off = true
     }
 }
 
--- Integration with an external volume mixer (optional).
+-- EN: Integration with an external volume mixer (optional).
+-- PT: Integração com um mixer de volume externo (opcional).
 Config.MasterVolume = {
-    -- Resource and export read once when the audio engine starts, e.g. Resource = "my_mixer", Export = "GetVolume".
-    -- The export receives the resource name and must return 0-100.
+    -- EN: Resource and export read when the audio engine starts, e.g. Resource = "my_mixer", Export = "GetVolume".
+    --     The export receives the resource name and must return 0-100.
+    -- PT: Resource e export lidos quando o engine de áudio inicia, ex.: Resource = "meu_mixer", Export = "GetVolume".
+    --     O export recebe o nome do resource e deve retornar 0-100.
     Resource = nil,
     Export = "GetVolume",
-    -- Extra export names that set FiveFY's master volume (0-100), for mixers that push volume.
-    -- FiveFY always exposes exports.fivefy:SetMasterVolume(volume).
+    -- EN: Extra export names that set FiveFly's master volume (0-100), for mixers that push volume.
+    --     FiveFly always exposes exports.fivefly:SetMasterVolume(volume).
+    -- PT: Nomes extras de export que definem o volume geral do FiveFly (0-100), para mixers que enviam o volume.
+    --     O FiveFly sempre expõe exports.fivefly:SetMasterVolume(volume).
     ExportAliases = {}
 }
 
--- Radio stations shown in the app. Each station needs at least one track with a streamUrl (or a YouTube videoId).
+-- EN: Radio stations shown in the app. Each station needs at least one track with a streamUrl (or a YouTube videoId).
+--     Only these stream URLs are accepted from clients.
+-- PT: Rádios exibidas no app. Cada rádio precisa de ao menos uma faixa com streamUrl (ou um videoId do YouTube).
+--     Só essas URLs de stream são aceitas vindas dos clients.
 Config.Stations = {
     -- {
     --     id = "my-radio",
@@ -173,7 +207,8 @@ Config.Stations = {
 }
 
 ---------------------------------------------------------------------------------------------------
--- Portable speaker prop. Uses a base-game model by default; point Model to your own streamed prop if you have one.
+-- EN: Portable speaker prop. Base-game model by default; point Model to your own streamed prop if you have one.
+-- PT: Prop da caixa de som. Modelo do jogo base por padrão; aponte Model para o seu prop, se tiver um.
 ---------------------------------------------------------------------------------------------------
 Config.Prop = {
     Model = "prop_boombox_01",
@@ -189,8 +224,10 @@ Config.Prop = {
 }
 
 ---------------------------------------------------------------------------------------------------
--- Spatial audio ranges (meters) and volumes (0-100).
--- The server caps every reported range to the largest range configured here.
+-- EN: Spatial audio ranges (meters) and volumes (0-100). The server caps every reported range to the
+--     largest range configured here.
+-- PT: Alcance (metros) e volume (0-100) do áudio espacial. O servidor limita qualquer alcance informado
+--     ao maior alcance configurado aqui.
 ---------------------------------------------------------------------------------------------------
 Config.Range = {
     prop = {
@@ -198,13 +235,14 @@ Config.Range = {
         volume = 78.0
     },
     vehicle = {
-        -- Playback stops when the owner gets farther than this from the connected vehicle.
+        -- EN: Playback stops when the owner gets farther than this from the connected vehicle.
+        -- PT: A música para quando o dono se afasta mais que isso do veículo conectado.
         ownerMaxDistance = 80.0,
         default = {
             range = 24.0,
             volume = 82.0
         },
-        -- Per vehicle class (GetVehicleClass).
+        -- EN: Per vehicle class (GetVehicleClass). / PT: Por classe de veículo (GetVehicleClass).
         classProfiles = {
             [0] = { range = 18.0, volume = 68.0 },
             [1] = { range = 22.0, volume = 78.0 },
@@ -223,8 +261,10 @@ Config.Range = {
             [18] = { range = 32.0, volume = 90.0 },
             [20] = { range = 36.0, volume = 94.0 }
         },
-        -- Sound-system vehicles (party buses, speaker trailers). A hitched trailer matching this profile
-        -- becomes the audio source instead of the towing vehicle.
+        -- EN: Sound-system vehicles (party buses, speaker trailers). A hitched trailer matching this profile
+        --     becomes the audio source instead of the towing vehicle.
+        -- PT: Veículos de som (ônibus de festa, carretas de som). Uma carreta engatada que bata com este perfil
+        --     passa a ser a origem do áudio no lugar do veículo que a puxa.
         soundSystem = {
             range = 58.0,
             volume = 100.0,
@@ -232,7 +272,8 @@ Config.Range = {
                 pbus2 = true
             },
             classes = {},
-            -- Case-insensitive substrings of the vehicle display name.
+            -- EN: Case-insensitive substrings of the vehicle display name.
+            -- PT: Trechos do nome do veículo, sem diferenciar maiúsculas.
             namePatterns = {
                 "sound",
                 "speaker"
@@ -242,7 +283,7 @@ Config.Range = {
 }
 
 Config.LocalAudio = {
-    -- Volume multiplier for the "private" output (only the player hears it).
+    -- EN: Volume multiplier for the "private" output. / PT: Multiplicador de volume da saída "privado".
     privateVolumeMultiplier = 0.35
 }
 
@@ -259,6 +300,7 @@ Config.Sync = {
     PositionThreshold = 1.0,
     VolumeIntervalMs = 100,
     ListenerRefreshMs = 1000,
-    -- Max distance (meters) between a player and the audio source position they report.
+    -- EN: Max distance (meters) between a player and the speaker position they report.
+    -- PT: Distância máxima (metros) entre o jogador e a posição da caixa de som que ele informa.
     MaxSourceDistance = 120.0
 }

@@ -25,7 +25,7 @@ local function load(vehicles, pedVehicle)
     _G.GetEntityCoords = function() return vector3(0, 0, 0) end
 
     dofile("client/vehicle.lua")
-    return FiveFY.Vehicle
+    return FiveFly.Vehicle
 end
 
 return {

@@ -2,7 +2,7 @@ import { Component, StrictMode, useEffect, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { fetchNui } from "../bridge/nui";
 import { PanelShell } from "../shells/PanelShell";
-import { FiveFYProvider, useFiveFY } from "../state/store";
+import { FiveFlyProvider, useFiveFly } from "../state/store";
 import "../styles/index.css";
 
 const container = document.getElementById("panel-root") as HTMLElement;
@@ -27,7 +27,7 @@ class PanelErrorBoundary extends Component<{ children: ReactNode }, { failed: bo
     }
 
     componentDidCatch(error: unknown) {
-        console.error("[fivefy] panel crashed", error);
+        console.error("[fivefly] panel crashed", error);
         closePanel();
     }
 
@@ -44,7 +44,7 @@ let boundary: PanelErrorBoundary | null = null;
 
 /** Exposes the store reload so a reopened panel shows changes made from the phone meanwhile. */
 function ReloadBinding() {
-    const { actions } = useFiveFY();
+    const { actions } = useFiveFly();
     const reload = actions.reload;
 
     useEffect(() => {
@@ -66,10 +66,10 @@ export function openPanel() {
         root.render(
             <StrictMode>
                 <PanelErrorBoundary ref={(instance) => { boundary = instance; }}>
-                    <FiveFYProvider origin="panel">
+                    <FiveFlyProvider origin="panel">
                         <ReloadBinding />
                         <PanelShell onClose={closePanel} />
-                    </FiveFYProvider>
+                    </FiveFlyProvider>
                 </PanelErrorBoundary>
             </StrictMode>
         );

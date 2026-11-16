@@ -1,16 +1,18 @@
 # In-game test checklist
 
+> Português: [docs/pt-BR/testing-in-game.md](pt-BR/testing-in-game.md)
+
 Automated tests (`lua tests/lua/run.lua` and `npm test` in `ui/`) cover pure logic with stubbed natives. They do not prove that audio, NUI focus or the phone integration work in FiveM. Run this checklist on a test server before each release, ideally with two players.
 
 ## Start
 
-- [ ] `ensure oxmysql`, your framework, `lb-phone` (optional) and `fivefy`, in this order.
+- [ ] `ensure oxmysql`, your framework, `lb-phone` (optional) and `fivefly`, in this order.
 - [ ] The console shows `framework: <name>` and no errors. On first start, `applying database migration 1`.
-- [ ] Restarting `fivefy` while players are online does not leave a grey or black layer on screen.
+- [ ] Restarting `fivefly` while players are online does not leave a grey or black layer on screen.
 
 ## Phone app (lb-phone)
 
-- [ ] The FiveFY app appears and opens.
+- [ ] The FiveFly app appears and opens.
 - [ ] Search returns results; playing a track starts audio.
 - [ ] Pause, resume, seek, next, previous, shuffle and repeat work.
 - [ ] Favorites, playlists (create, add, remove, cover, visibility, delete), import by code.
@@ -19,7 +21,7 @@ Automated tests (`lua tests/lua/run.lua` and `npm test` in `ui/`) cover pure log
 
 ## Panel
 
-- [ ] `/fivefy` (or the key binding) opens it; Esc and the close button close it and release the mouse.
+- [ ] `/fivefly` (or the key binding) opens it; Esc and the close button close it and release the mouse.
 - [ ] It controls the same playback as the phone, and changes in one show up in the other.
 - [ ] Works on a server **without** lb-phone.
 - [ ] Opening is blocked while dead (`Config.Panel.CanOpen`), and the panel closes when the player dies.

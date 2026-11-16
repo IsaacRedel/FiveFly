@@ -1,4 +1,4 @@
-FiveFY = FiveFY or {}
+FiveFly = FiveFly or {}
 
 ---@class FrameworkAdapter
 ---@field name string
@@ -8,12 +8,12 @@ FiveFY = FiveFY or {}
 ---@field GetDisplayName? fun(source: integer): string|nil character name
 ---@field HasPermission? fun(source: integer, permission: string): boolean
 
-FiveFY.Bridge = {
+FiveFly.Bridge = {
     Adapters = {},
     active = nil
 }
 
-local Bridge = FiveFY.Bridge
+local Bridge = FiveFly.Bridge
 local DETECTION_ORDER <const> = { "qbx", "qb", "esx", "vrp" }
 
 ---@param adapter FrameworkAdapter
@@ -36,7 +36,7 @@ local function tryActivate(name)
         local ok, ready = pcall(adapter.Init)
 
         if not ok or ready == false then
-            FiveFY.Log("warn", "framework adapter '%s' failed to initialize: %s", name, tostring(ready))
+            FiveFly.Log("warn", FiveFly.T("log.adapter_failed", name, tostring(ready)))
             return false
         end
     end
@@ -60,7 +60,7 @@ function Bridge.Detect()
 
     if wanted ~= "auto" then
         if not Bridge.Adapters[wanted] then
-            FiveFY.Log("error", "Config.Framework = '%s' is not a known adapter", wanted)
+            FiveFly.Log("error", FiveFly.T("log.unknown_framework", wanted))
             return nil
         end
 
@@ -70,7 +70,7 @@ function Bridge.Detect()
 
         if not warnedUnavailable then
             warnedUnavailable = true
-            FiveFY.Log("warn", "waiting for framework '%s': ensure it before fivefy in server.cfg", wanted)
+            FiveFly.Log("warn", FiveFly.T("log.waiting_framework", wanted))
         end
 
         return nil
@@ -90,7 +90,7 @@ local function getAdapter()
     return Bridge.active or Bridge.Detect()
 end
 
---- A framework started after FiveFY (wrong ensure order or a framework restart) replaces standalone.
+--- A framework started after FiveFly (wrong ensure order or a framework restart) replaces standalone.
 AddEventHandler("onResourceStart", function(resourceName)
     for _, name in ipairs(DETECTION_ORDER) do
         local adapter = Bridge.Adapters[name]
@@ -103,8 +103,7 @@ AddEventHandler("onResourceStart", function(resourceName)
                 Bridge.active = nil
 
                 if tryActivate(name) then
-                    FiveFY.Log(current == "standalone" and "warn" or "info", "framework: %s (started after fivefy%s)", name,
-                        current == "standalone" and "; players who used FiveFY meanwhile were saved under their license" or "")
+                    FiveFly.Log(current == "standalone" and "warn" or "info", FiveFly.T(current == "standalone" and "log.framework_late_standalone" or "log.framework_late", name))
                 end
             end
 
@@ -130,7 +129,7 @@ function Bridge.GetIdentifier(source)
     local ok, identifier = pcall(adapter.GetIdentifier, source)
 
     if not ok then
-        FiveFY.Log("debug", "GetIdentifier failed for %s: %s", tostring(source), tostring(identifier))
+        FiveFly.Log("debug", "GetIdentifier failed for %s: %s", tostring(source), tostring(identifier))
         return nil
     end
 
@@ -151,12 +150,12 @@ function Bridge.GetDisplayName(source)
         local ok, result = pcall(adapter.GetDisplayName, source)
 
         if ok and type(result) == "string" then
-            name = FiveFY.Utils.Trim(result)
+            name = FiveFly.Utils.Trim(result)
         end
     end
 
     if not name or name == "" then
-        name = FiveFY.Utils.Trim(GetPlayerName(source) or "")
+        name = FiveFly.Utils.Trim(GetPlayerName(source) or "")
     end
 
     return name ~= "" and name:sub(1, 48) or ("Player " .. tostring(source))
@@ -194,5 +193,5 @@ CreateThread(function()
     -- Give frameworks a moment to finish their own start before detecting.
     Wait(0)
     local adapter = Bridge.Detect()
-    FiveFY.Log("info", "framework: %s", adapter and adapter.name or "none")
+    FiveFly.Log("info", FiveFly.T("log.framework", adapter and adapter.name or "none"))
 end)

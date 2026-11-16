@@ -1,18 +1,20 @@
 # Changelog
 
+> Português: [CHANGELOG.pt-BR.md](CHANGELOG.pt-BR.md)
+
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow [Semantic Versioning](https://semver.org/).
 
 ## [1.0.0] - Unreleased
 
-First public release, rewritten from the private `mzm_CaliFY` resource.
+First public release of FiveFly, rewritten from the private `mzm_CaliFY` resource.
 
 ### Added
 
 - Desktop panel opened by command or key binding, sharing state with the phone app. lb-phone is now optional.
 - Framework bridge for Qbox, QBCore, ESX, vRP and standalone.
-- Official YouTube Data API search provider (`fivefy_youtube_key` convar), with scraping as a fallback.
+- Official YouTube Data API search provider (`fivefly_youtube_key` convar), with scraping as a fallback.
 - Automatic database migrations compatible with MySQL 8 and MariaDB.
-- English and Brazilian Portuguese UI.
+- English and Brazilian Portuguese: `Config.Locale` switches the UI, console messages, lb-phone app description, key binding description and YouTube search region. Config comments and docs in both languages.
 - Playlist limit (`Config.Library.MaxPlaylists`) is now enforced.
 - Lua and UI test suites, CI and release workflows, browser demo.
 

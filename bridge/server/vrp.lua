@@ -1,7 +1,7 @@
 local vRP
 
 --- vRP's lib/Proxy.lua relies on globals from @vrp/lib/utils.lua: `module`, `async` and `table.maxn`.
---- FiveFY does not list vRP in its manifest, so when vRP is used it runs vRP's own utils.lua (matching the
+--- FiveFly does not list vRP in its manifest, so when vRP is used it runs vRP's own utils.lua (matching the
 --- fork installed on the server) and only falls back to equivalent polyfills when that file is missing.
 local function loadVrpUtils()
     local code = LoadResourceFile("vrp", "lib/utils.lua")
@@ -19,7 +19,7 @@ local function loadVrpUtils()
     local ok, err = pcall(chunk)
 
     if not ok then
-        FiveFY.Log("warn", "could not run vrp/lib/utils.lua, using built-in helpers: %s", tostring(err))
+        FiveFly.Log("warn", FiveFly.T("log.vrp_utils_failed", tostring(err)))
     end
 
     return ok
@@ -108,7 +108,7 @@ end
 
 local function firstText(...)
     for i = 1, select("#", ...) do
-        local value = FiveFY.Utils.Trim(tostring(select(i, ...) or ""))
+        local value = FiveFly.Utils.Trim(tostring(select(i, ...) or ""))
 
         if value ~= "" and value ~= "nil" then
             return value
@@ -123,7 +123,7 @@ local function getUserId(source)
     return tonumber(userId)
 end
 
-FiveFY.Bridge.Register({
+FiveFly.Bridge.Register({
     name = "vrp",
     resource = "vrp",
 
@@ -154,13 +154,13 @@ FiveFY.Bridge.Register({
 
         -- Classic vRP: firstname = first name, name = surname. Brazilian forks: nome/sobrenome or name/lastname.
         if identity.firstname ~= nil then
-            return FiveFY.Utils.Trim(firstText(identity.firstname) .. " " .. firstText(identity.name))
+            return FiveFly.Utils.Trim(firstText(identity.firstname) .. " " .. firstText(identity.name))
         end
 
         local firstName = firstText(identity.nome, identity.name, identity.firstName)
         local lastName = firstText(identity.sobrenome, identity.lastname, identity.lastName)
 
-        return FiveFY.Utils.Trim(firstName .. " " .. lastName)
+        return FiveFly.Utils.Trim(firstName .. " " .. lastName)
     end,
 
     HasPermission = function(source, permission)

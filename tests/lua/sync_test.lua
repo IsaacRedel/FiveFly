@@ -2,10 +2,10 @@ local H = require("helpers")
 
 local function load()
     local runtime = H.reset()
-    FiveFY.Permissions = { CanUse = function() return true end }
-    FiveFY.RateLimit = { Allow = function() return true end }
+    FiveFly.Permissions = { CanUse = function() return true end }
+    FiveFly.RateLimit = { Allow = function() return true end }
     dofile("server/services/sync.lua")
-    return FiveFY.ServerSync, runtime
+    return FiveFly.ServerSync, runtime
 end
 
 local track = { videoId = "abc", title = "Song" }
@@ -17,7 +17,7 @@ return {
             local sync, runtime = load()
             runtime.playerPeds[1] = vector3(0, 0, 0)
 
-            H.trigger(runtime.netEvents["fivefy:server:updateSource"], 1, {
+            H.trigger(runtime.netEvents["fivefly:server:updateSource"], 1, {
                 track = track,
                 sourceType = "prop",
                 sourceCoords = { x = 1, y = 0, z = 0 },
@@ -37,7 +37,7 @@ return {
             local sync, runtime = load()
             runtime.playerPeds[1] = vector3(10, 10, 10)
 
-            H.trigger(runtime.netEvents["fivefy:server:updateSource"], 1, {
+            H.trigger(runtime.netEvents["fivefly:server:updateSource"], 1, {
                 track = track,
                 sourceType = "prop",
                 sourceCoords = { x = 5000, y = 5000, z = 0 }
@@ -55,7 +55,7 @@ return {
             runtime.playerPeds[1] = vector3(0, 0, 0)
             runtime.entities[77] = vector3(3000, 3000, 0)
 
-            H.trigger(runtime.netEvents["fivefy:server:updateSource"], 1, { track = track, sourceType = "prop", propNetId = 77 })
+            H.trigger(runtime.netEvents["fivefly:server:updateSource"], 1, { track = track, sourceType = "prop", propNetId = 77 })
 
             local coords = sync.GetSources()[1].sourceCoords
             H.eq(coords.x, 0, "player position instead of the remote entity")
@@ -66,7 +66,7 @@ return {
         run = function()
             local sync, runtime = load()
             runtime.playerPeds[1] = vector3(0, 0, 0)
-            local handler = runtime.netEvents["fivefy:server:updateSource"]
+            local handler = runtime.netEvents["fivefly:server:updateSource"]
 
             H.trigger(handler, 1, { track = track, sourceType = "global" })
             H.eq(sync.GetSources()[1], nil, "unknown source type")
@@ -86,11 +86,11 @@ return {
             runtime.playerPeds[2] = vector3(5, 0, 0)
             runtime.playerPeds[3] = vector3(500, 0, 0)
 
-            H.trigger(runtime.netEvents["fivefy:server:updateSource"], 1, { track = track, sourceType = "prop", range = 16 })
+            H.trigger(runtime.netEvents["fivefly:server:updateSource"], 1, { track = track, sourceType = "prop", range = 16 })
 
             local targets = {}
             for _, event in ipairs(runtime.clientEvents) do
-                if event.name == "fivefy:client:sourceAdded" then
+                if event.name == "fivefly:client:sourceAdded" then
                     targets[event.target] = true
                 end
             end
@@ -107,12 +107,12 @@ return {
             runtime.playerPeds[1] = vector3(0, 0, 0)
             runtime.playerPeds[2] = vector3(2, 0, 0)
 
-            H.trigger(runtime.netEvents["fivefy:server:updateSource"], 1, { track = track, sourceType = "prop" })
+            H.trigger(runtime.netEvents["fivefly:server:updateSource"], 1, { track = track, sourceType = "prop" })
             runtime.clientEvents = {}
             H.trigger(runtime.events.playerDropped, 1)
 
             H.eq(sync.GetSources()[1], nil, "source removed")
-            H.eq(runtime.clientEvents[1] and runtime.clientEvents[1].name, "fivefy:client:sourceRemoved", "listeners notified")
+            H.eq(runtime.clientEvents[1] and runtime.clientEvents[1].name, "fivefly:client:sourceRemoved", "listeners notified")
         end
     }
 }

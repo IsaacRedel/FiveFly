@@ -40,13 +40,13 @@ jobs:
 
       - name: Package resource
         run: |
-          mkdir -p package/fivefy/ui
-          cp -r fxmanifest.lua config.lua LICENSE README.md README.pt-BR.md CHANGELOG.md bridge client server shared sql docs package/fivefy/
-          cp -r ui/dist package/fivefy/ui/dist
-          rm -f package/fivefy/ui/dist/preview.html
-          cd package && zip -r ../fivefy.zip fivefy
+          mkdir -p package/fivefly/ui
+          cp -r fxmanifest.lua config.lua LICENSE README.md README.pt-BR.md CHANGELOG.md bridge client server shared sql docs package/fivefly/
+          cp -r ui/dist package/fivefly/ui/dist
+          rm -f package/fivefly/ui/dist/preview.html
+          cd package && zip -r ../fivefly.zip fivefly
 
       - uses: softprops/action-gh-release@v2
         with:
-          files: fivefy.zip
+          files: fivefly.zip
           generate_release_notes: true

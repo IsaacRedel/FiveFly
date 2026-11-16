@@ -1,11 +1,11 @@
---- Request dispatcher: every NUI action reaches the server through `fivefy:server:request`
---- and is answered with `fivefy:client:response` using the envelope { ok, data } / { ok = false, error }.
+--- Request dispatcher: every NUI action reaches the server through `fivefly:server:request`
+--- and is answered with `fivefly:client:response` using the envelope { ok, data } / { ok = false, error }.
 --- Actions are registered in server/actions/*.lua, which load after this file.
-FiveFY.Actions = {
+FiveFly.Actions = {
     registry = {}
 }
 
-local Actions = FiveFY.Actions
+local Actions = FiveFly.Actions
 
 ---@class ActionContext
 ---@field source integer
@@ -37,19 +37,19 @@ function Actions.Dispatch(source, action, payload)
         return fail("unknown_action")
     end
 
-    if not FiveFY.Database.ready then
+    if not FiveFly.Database.ready then
         return fail("database_not_ready")
     end
 
-    if not FiveFY.Permissions.CanUse(source) then
+    if not FiveFly.Permissions.CanUse(source) then
         return fail("permission_denied")
     end
 
-    if definition.rateLimit and not FiveFY.RateLimit.Allow(source, action, definition.rateLimit) then
+    if definition.rateLimit and not FiveFly.RateLimit.Allow(source, action, definition.rateLimit) then
         return fail("rate_limited")
     end
 
-    local userId = FiveFY.Identity.GetUserId(source)
+    local userId = FiveFly.Identity.GetUserId(source)
 
     if not userId then
         return fail("identity_unavailable")
@@ -58,7 +58,7 @@ function Actions.Dispatch(source, action, payload)
     local success, data, errorCode = pcall(definition.handler, { source = source, userId = userId }, payload)
 
     if not success then
-        FiveFY.Log("error", "action '%s' failed: %s", action, tostring(data))
+        FiveFly.Log("error", FiveFly.T("log.action_failed", action, tostring(data)))
         return fail("internal_error")
     end
 
@@ -69,7 +69,7 @@ function Actions.Dispatch(source, action, payload)
     return ok(data)
 end
 
-RegisterNetEvent("fivefy:server:request", function(requestId, action, payload)
+RegisterNetEvent("fivefly:server:request", function(requestId, action, payload)
     local source = source
     local safeRequestId = tostring(requestId or ""):sub(1, 64)
 
@@ -78,5 +78,5 @@ RegisterNetEvent("fivefy:server:request", function(requestId, action, payload)
     end
 
     local response = Actions.Dispatch(source, tostring(action or ""), type(payload) == "table" and payload or {})
-    TriggerClientEvent("fivefy:client:response", source, safeRequestId, response)
+    TriggerClientEvent("fivefly:client:response", source, safeRequestId, response)
 end)

@@ -2,17 +2,18 @@ fx_version "cerulean"
 game "gta5"
 lua54 "yes"
 
-name "fivefy"
-author "Mezmerize"
-description "FiveFY: music player for FiveM with lb-phone app, desktop panel, playlists and spatial audio."
+name "fivefly"
+author "Isaac Redel (Mezmerize)"
+description "FiveFly: music player for FiveM with lb-phone app, desktop panel, playlists and spatial audio."
 version "1.0.0"
-repository "https://github.com/OWNER/fivefy"
+repository "https://github.com/IsaacRedel/FiveFly"
 
 ui_page "ui/dist/engine.html"
 
 shared_scripts {
     "config.lua",
-    "shared/utils.lua"
+    "shared/utils.lua",
+    "shared/locale.lua"
 }
 
 server_scripts {

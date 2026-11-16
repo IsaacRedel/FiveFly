@@ -1,11 +1,11 @@
 --- Composes profiles, social search, recommendations and stations on top of the repositories.
-FiveFY.Library = {}
+FiveFly.Library = {}
 
-local Library = FiveFY.Library
-local Utils = FiveFY.Utils
-local Profiles = FiveFY.Repo.Profiles
-local Playlists = FiveFY.Repo.Playlists
-local Tracks = FiveFY.Repo.Tracks
+local Library = FiveFly.Library
+local Utils = FiveFly.Utils
+local Profiles = FiveFly.Repo.Profiles
+local Playlists = FiveFly.Repo.Playlists
+local Tracks = FiveFly.Repo.Tracks
 
 local function attachPublicPlaylists(profiles)
     local ids = {}
@@ -25,7 +25,7 @@ end
 
 --- Profile of the player using the app. Also refreshes the stored display name from the framework.
 function Library.GetPlayerProfile(source, userId)
-    Profiles.Ensure(userId, FiveFY.Bridge.GetDisplayName(source))
+    Profiles.Ensure(userId, FiveFly.Bridge.GetDisplayName(source))
 
     local profile = Profiles.Get(userId, userId) or Profiles.Map({ user_id = userId })
     attachPublicPlaylists({ profile })
@@ -74,7 +74,7 @@ function Library.UpdateProfile(source, userId, payload)
     end
 
     if payload.avatar ~= nil then
-        local avatar, mediaError = FiveFY.Media.ResolveImageUrl(payload.avatar)
+        local avatar, mediaError = FiveFly.Media.ResolveImageUrl(payload.avatar)
 
         if avatar == nil then
             return nil, mediaError

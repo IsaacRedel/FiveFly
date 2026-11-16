@@ -8,11 +8,11 @@ import { setUiOrigin } from "./bridge/nui";
 import { PREVIEW_API_FALLBACKS } from "./preview/mockData";
 import { PanelShell } from "./shells/PanelShell";
 import { PhoneShell } from "./shells/PhoneShell";
-import { FiveFYProvider } from "./state/store";
+import { FiveFlyProvider } from "./state/store";
 import "./styles/index.css";
 import "./styles/preview.css";
 
-(window as Window & { __FIVEFY_PREVIEW__?: unknown }).__FIVEFY_PREVIEW__ = PREVIEW_API_FALLBACKS;
+(window as Window & { __FIVEFLY_PREVIEW__?: unknown }).__FIVEFLY_PREVIEW__ = PREVIEW_API_FALLBACKS;
 
 type Mode = "phone" | "panel";
 
@@ -35,14 +35,14 @@ function Preview() {
                 <div className="preview-title">
                     <span className="preview-mark" aria-hidden="true" />
                     <div>
-                        <h1>FiveFY</h1>
+                        <h1>FiveFly</h1>
                         <p>{lang === "pt-BR" ? "Demo interativa com dados de exemplo." : "Interactive demo with sample data."}</p>
                     </div>
                 </div>
                 <div className="preview-controls">
                     <div className="preview-toggle" role="group" aria-label="Layout">
-                        <button className={mode === "phone" ? "active" : ""} type="button" onClick={() => setMode("phone")}>Phone app</button>
-                        <button className={mode === "panel" ? "active" : ""} type="button" onClick={() => setMode("panel")}>Panel</button>
+                        <button className={mode === "phone" ? "active" : ""} type="button" onClick={() => setMode("phone")}>{lang === "pt-BR" ? "App do celular" : "Phone app"}</button>
+                        <button className={mode === "panel" ? "active" : ""} type="button" onClick={() => setMode("panel")}>{lang === "pt-BR" ? "Painel" : "Panel"}</button>
                     </div>
                     <div className="preview-toggle" role="group" aria-label="Language">
                         <button className={lang === "en" ? "active" : ""} type="button" onClick={() => setParam("lang", "en")}>EN</button>
@@ -53,15 +53,15 @@ function Preview() {
 
             {mode === "phone" ? (
                 <section className="preview-phone" aria-label="Phone app preview">
-                    <FiveFYProvider origin="phone" key="phone">
+                    <FiveFlyProvider origin="phone" key="phone">
                         <PhoneShell />
-                    </FiveFYProvider>
+                    </FiveFlyProvider>
                 </section>
             ) : (
                 <section className="preview-panel" aria-label="Panel preview">
-                    <FiveFYProvider origin="panel" key="panel">
+                    <FiveFlyProvider origin="panel" key="panel">
                         <PanelShell onClose={() => setMode("phone")} />
-                    </FiveFYProvider>
+                    </FiveFlyProvider>
                 </section>
             )}
         </main>

@@ -1,8 +1,8 @@
 --- Spatial audio: tracks speakers/vehicles playing music and streams them to nearby players.
-FiveFY.ServerSync = {}
+FiveFly.ServerSync = {}
 
-local ServerSync = FiveFY.ServerSync
-local Utils = FiveFY.Utils
+local ServerSync = FiveFly.ServerSync
+local Utils = FiveFly.Utils
 
 ---@type table<integer, table>
 local sources = {}
@@ -162,7 +162,7 @@ local function stopSource(source)
 
     if sourceInfo then
         for listener in pairs(sourceInfo.listeners) do
-            TriggerClientEvent("fivefy:client:sourceRemoved", listener, source)
+            TriggerClientEvent("fivefly:client:sourceRemoved", listener, source)
         end
     end
 
@@ -189,7 +189,7 @@ function ServerSync.RefreshListeners(source)
 
     for listener in pairs(sourceInfo.listeners) do
         if not nearby[listener] then
-            TriggerClientEvent("fivefy:client:sourceRemoved", listener, source)
+            TriggerClientEvent("fivefly:client:sourceRemoved", listener, source)
             sourceInfo.listeners[listener] = nil
         end
     end
@@ -198,9 +198,9 @@ function ServerSync.RefreshListeners(source)
 
     for listener in pairs(nearby) do
         if sourceInfo.listeners[listener] then
-            TriggerClientEvent("fivefy:client:sourceUpdated", listener, source, payload)
+            TriggerClientEvent("fivefly:client:sourceUpdated", listener, source, payload)
         else
-            TriggerClientEvent("fivefy:client:sourceAdded", listener, source, payload)
+            TriggerClientEvent("fivefly:client:sourceAdded", listener, source, payload)
             sourceInfo.listeners[listener] = true
         end
     end
@@ -216,7 +216,7 @@ local function refreshAllSources()
             sourceInfo.sourceCoords = coords
 
             if isVehicleOwnerTooFar(source, sourceInfo) then
-                TriggerClientEvent("fivefy:client:forceStopPlayback", source, "vehicle_owner_too_far")
+                TriggerClientEvent("fivefly:client:forceStopPlayback", source, "vehicle_owner_too_far")
                 stopSource(source)
             else
                 ServerSync.RefreshListeners(source)
@@ -225,14 +225,14 @@ local function refreshAllSources()
     end
 end
 
-RegisterNetEvent("fivefy:server:updateSource", function(payload)
+RegisterNetEvent("fivefly:server:updateSource", function(payload)
     local source = source
 
-    if type(payload) ~= "table" or not FiveFY.Permissions.CanUse(source) then
+    if type(payload) ~= "table" or not FiveFly.Permissions.CanUse(source) then
         return
     end
 
-    if not FiveFY.RateLimit.Allow(source, "sync.updateSource", Config.RateLimits.SyncUpdateMs) then
+    if not FiveFly.RateLimit.Allow(source, "sync.updateSource", Config.RateLimits.SyncUpdateMs) then
         return
     end
 
@@ -252,7 +252,7 @@ RegisterNetEvent("fivefy:server:updateSource", function(payload)
     end
 
     if isVehicleOwnerTooFar(source, sourceInfo) then
-        TriggerClientEvent("fivefy:client:forceStopPlayback", source, "vehicle_owner_too_far")
+        TriggerClientEvent("fivefly:client:forceStopPlayback", source, "vehicle_owner_too_far")
         stopSource(source)
         return
     end
@@ -263,7 +263,7 @@ RegisterNetEvent("fivefy:server:updateSource", function(payload)
     ServerSync.RefreshListeners(source)
 end)
 
-RegisterNetEvent("fivefy:server:stopSource", function()
+RegisterNetEvent("fivefly:server:stopSource", function()
     stopSource(source)
 end)
 

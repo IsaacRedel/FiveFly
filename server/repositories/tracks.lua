@@ -1,8 +1,8 @@
 --- Favorites, listening history and per-user track statistics.
-FiveFY.Repo = FiveFY.Repo or {}
-FiveFY.Repo.Tracks = {}
+FiveFly.Repo = FiveFly.Repo or {}
+FiveFly.Repo.Tracks = {}
 
-local Tracks = FiveFY.Repo.Tracks
+local Tracks = FiveFly.Repo.Tracks
 local historyPrunedAt = {}
 
 ---@return Track
@@ -34,7 +34,7 @@ end
 function Tracks.GetFavorites(userId)
     return Tracks.MapRows(MySQL.query.await([[
         SELECT video_id, title, thumbnail, duration, author
-        FROM fivefy_favorites
+        FROM fivefly_favorites
         WHERE user_id = ?
         ORDER BY created_at DESC
     ]], { userId }))
@@ -44,7 +44,7 @@ end
 ---@return boolean favorite
 function Tracks.ToggleFavorite(userId, track)
     local removed = MySQL.update.await([[
-        DELETE FROM fivefy_favorites WHERE user_id = ? AND video_id = ?
+        DELETE FROM fivefly_favorites WHERE user_id = ? AND video_id = ?
     ]], { userId, track.videoId })
 
     if removed and removed > 0 then
@@ -52,7 +52,7 @@ function Tracks.ToggleFavorite(userId, track)
     end
 
     MySQL.insert.await([[
-        INSERT IGNORE INTO fivefy_favorites (user_id, video_id, title, thumbnail, duration, author)
+        INSERT IGNORE INTO fivefly_favorites (user_id, video_id, title, thumbnail, duration, author)
         VALUES (?, ?, ?, ?, ?, ?)
     ]], { userId, track.videoId, track.title, track.thumbnail, track.duration, track.author })
 
@@ -66,7 +66,7 @@ end
 function Tracks.GetHistory(userId, limit)
     return Tracks.MapRows(MySQL.query.await([[
         SELECT video_id, title, thumbnail, duration, author
-        FROM fivefy_history
+        FROM fivefly_history
         WHERE user_id = ?
         ORDER BY played_at DESC, id DESC
         LIMIT ?
@@ -74,7 +74,7 @@ function Tracks.GetHistory(userId, limit)
 end
 
 function Tracks.ClearHistory(userId)
-    MySQL.update.await("DELETE FROM fivefy_history WHERE user_id = ?", { userId })
+    MySQL.update.await("DELETE FROM fivefly_history WHERE user_id = ?", { userId })
 end
 
 --- Keeps at most Config.Library.MaxHistoryRowsPerUser rows per user, checked at most once per interval.
@@ -90,14 +90,14 @@ function Tracks.PruneHistory(userId)
     historyPrunedAt[userId] = now
 
     local cutoff = MySQL.query.await([[
-        SELECT id FROM fivefy_history
+        SELECT id FROM fivefly_history
         WHERE user_id = ?
         ORDER BY id DESC
         LIMIT 1 OFFSET ?
     ]], { userId, maxRows - 1 }) or {}
 
     if cutoff[1] then
-        MySQL.update.await("DELETE FROM fivefy_history WHERE user_id = ? AND id < ?", { userId, cutoff[1].id })
+        MySQL.update.await("DELETE FROM fivefly_history WHERE user_id = ? AND id < ?", { userId, cutoff[1].id })
     end
 end
 
@@ -107,7 +107,7 @@ function Tracks.RecordStat(userId, track, kind)
     local skips = kind == "skip" and 1 or 0
 
     MySQL.insert.await([[
-        INSERT INTO fivefy_track_stats (user_id, video_id, title, thumbnail, duration, author, play_count, skip_count)
+        INSERT INTO fivefly_track_stats (user_id, video_id, title, thumbnail, duration, author, play_count, skip_count)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE
             title = VALUES(title),
@@ -122,7 +122,7 @@ end
 --- Records a play in the history and statistics. `track` must already be normalized.
 function Tracks.AddHistory(userId, track)
     MySQL.insert.await([[
-        INSERT INTO fivefy_history (user_id, video_id, title, thumbnail, duration, author)
+        INSERT INTO fivefly_history (user_id, video_id, title, thumbnail, duration, author)
         VALUES (?, ?, ?, ?, ?, ?)
     ]], { userId, track.videoId, track.title, track.thumbnail, track.duration, track.author })
 
@@ -133,7 +133,7 @@ end
 function Tracks.GetRecentFavorites(userId, limit)
     return Tracks.MapRows(MySQL.query.await([[
         SELECT video_id, title, thumbnail, duration, author
-        FROM fivefy_favorites
+        FROM fivefly_favorites
         WHERE user_id = ?
         ORDER BY created_at DESC
         LIMIT ?
@@ -145,10 +145,10 @@ function Tracks.GetLastArtistTracks(userId, limit)
     return Tracks.MapRows(MySQL.query.await([[
         SELECT h.video_id, MAX(h.title) AS title, MAX(h.thumbnail) AS thumbnail,
                MAX(h.duration) AS duration, MAX(h.author) AS author
-        FROM fivefy_history h
+        FROM fivefly_history h
         INNER JOIN (
             SELECT author
-            FROM fivefy_history
+            FROM fivefly_history
             WHERE user_id = ? AND author <> ''
             ORDER BY id DESC
             LIMIT 1
@@ -166,7 +166,7 @@ function Tracks.GetTopStats(userId, order, limit)
 
     return Tracks.MapRows(MySQL.query.await(([[
         SELECT video_id, title, thumbnail, duration, author
-        FROM fivefy_track_stats
+        FROM fivefly_track_stats
         WHERE user_id = ? AND %s > 0
         ORDER BY %s DESC, updated_at DESC
         LIMIT ?
@@ -177,7 +177,7 @@ end
 function Tracks.GetServerTopFavorites(limit)
     return Tracks.MapRows(MySQL.query.await([[
         SELECT video_id, MAX(title) AS title, MAX(thumbnail) AS thumbnail, MAX(duration) AS duration, MAX(author) AS author
-        FROM fivefy_favorites
+        FROM fivefly_favorites
         GROUP BY video_id
         ORDER BY COUNT(*) DESC, MAX(created_at) DESC
         LIMIT ?

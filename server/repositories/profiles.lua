@@ -1,8 +1,8 @@
-FiveFY.Repo = FiveFY.Repo or {}
-FiveFY.Repo.Profiles = {}
+FiveFly.Repo = FiveFly.Repo or {}
+FiveFly.Repo.Profiles = {}
 
-local Profiles = FiveFY.Repo.Profiles
-local Utils = FiveFY.Utils
+local Profiles = FiveFly.Repo.Profiles
+local Utils = FiveFly.Utils
 
 ---@class Profile
 ---@field userId integer
@@ -19,9 +19,9 @@ local Utils = FiveFY.Utils
 -- Selects a profile with its follower counts and whether the viewer (first parameter) follows it.
 local PROFILE_COLUMNS <const> = [[
     p.user_id, p.display_name, p.bio, p.avatar, p.is_public, p.show_activity,
-    (SELECT COUNT(*) FROM fivefy_follows f1 WHERE f1.target_user_id = p.user_id) AS follower_count,
-    (SELECT COUNT(*) FROM fivefy_follows f2 WHERE f2.follower_user_id = p.user_id) AS following_count,
-    EXISTS(SELECT 1 FROM fivefy_follows f3 WHERE f3.follower_user_id = ? AND f3.target_user_id = p.user_id) AS is_following
+    (SELECT COUNT(*) FROM fivefly_follows f1 WHERE f1.target_user_id = p.user_id) AS follower_count,
+    (SELECT COUNT(*) FROM fivefly_follows f2 WHERE f2.follower_user_id = p.user_id) AS following_count,
+    EXISTS(SELECT 1 FROM fivefly_follows f3 WHERE f3.follower_user_id = ? AND f3.target_user_id = p.user_id) AS is_following
 ]]
 
 local function normalizeDisplayName(value)
@@ -56,7 +56,7 @@ end
 --- Creates the profile on first use and keeps the display name in sync with the character name.
 function Profiles.Ensure(userId, displayName)
     MySQL.insert.await([[
-        INSERT INTO fivefy_profiles (user_id, display_name)
+        INSERT INTO fivefly_profiles (user_id, display_name)
         VALUES (?, ?)
         ON DUPLICATE KEY UPDATE display_name = VALUES(display_name)
     ]], { userId, normalizeDisplayName(displayName) })
@@ -66,7 +66,7 @@ end
 function Profiles.Get(userId, viewerUserId)
     local rows = MySQL.query.await(([[
         SELECT %s
-        FROM fivefy_profiles p
+        FROM fivefly_profiles p
         WHERE p.user_id = ?
         LIMIT 1
     ]]):format(PROFILE_COLUMNS), { viewerUserId or 0, userId }) or {}
@@ -76,7 +76,7 @@ end
 
 function Profiles.Update(userId, fields)
     MySQL.update.await([[
-        UPDATE fivefy_profiles
+        UPDATE fivefly_profiles
         SET bio = ?, avatar = ?, is_public = ?, show_activity = ?
         WHERE user_id = ?
     ]], {
@@ -90,7 +90,7 @@ end
 
 function Profiles.CanShowActivity(userId)
     local rows = MySQL.query.await([[
-        SELECT is_public, show_activity FROM fivefy_profiles WHERE user_id = ? LIMIT 1
+        SELECT is_public, show_activity FROM fivefly_profiles WHERE user_id = ? LIMIT 1
     ]], { userId }) or {}
 
     local row = rows[1]
@@ -101,8 +101,8 @@ end
 function Profiles.GetFollowing(userId)
     local rows = MySQL.query.await(([[
         SELECT %s
-        FROM fivefy_follows f
-        INNER JOIN fivefy_profiles p ON p.user_id = f.target_user_id
+        FROM fivefly_follows f
+        INNER JOIN fivefly_profiles p ON p.user_id = f.target_user_id
         WHERE f.follower_user_id = ? AND p.is_public = 1
         ORDER BY p.display_name ASC
         LIMIT 30
@@ -136,7 +136,7 @@ function Profiles.GetFollowedSet(followerUserId, userIds)
     end
 
     local rows = MySQL.query.await(([[
-        SELECT target_user_id FROM fivefy_follows
+        SELECT target_user_id FROM fivefly_follows
         WHERE follower_user_id = ? AND target_user_id IN (%s)
     ]]):format(placeholders), params) or {}
 
@@ -155,14 +155,14 @@ function Profiles.ToggleFollow(followerUserId, targetUserId)
         return nil, "invalid_profile"
     end
 
-    local exists = MySQL.query.await("SELECT 1 FROM fivefy_profiles WHERE user_id = ? LIMIT 1", { target }) or {}
+    local exists = MySQL.query.await("SELECT 1 FROM fivefly_profiles WHERE user_id = ? LIMIT 1", { target }) or {}
 
     if not exists[1] then
         return nil, "profile_not_found"
     end
 
     local removed = MySQL.update.await([[
-        DELETE FROM fivefy_follows WHERE follower_user_id = ? AND target_user_id = ?
+        DELETE FROM fivefly_follows WHERE follower_user_id = ? AND target_user_id = ?
     ]], { followerUserId, target })
 
     if removed and removed > 0 then
@@ -170,7 +170,7 @@ function Profiles.ToggleFollow(followerUserId, targetUserId)
     end
 
     MySQL.insert.await([[
-        INSERT IGNORE INTO fivefy_follows (follower_user_id, target_user_id) VALUES (?, ?)
+        INSERT IGNORE INTO fivefly_follows (follower_user_id, target_user_id) VALUES (?, ?)
     ]], { followerUserId, target })
 
     return true, nil
@@ -181,7 +181,7 @@ function Profiles.Search(viewerUserId, query)
     local pattern = "%" .. query .. "%"
     local rows = MySQL.query.await(([[
         SELECT %s
-        FROM fivefy_profiles p
+        FROM fivefly_profiles p
         WHERE p.is_public = 1 AND (p.display_name LIKE ? OR p.bio LIKE ? OR p.user_id = ?)
         ORDER BY p.display_name ASC
         LIMIT 10

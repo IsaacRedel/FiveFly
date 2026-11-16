@@ -4,7 +4,7 @@
  * No backdrop-filter here on purpose (CEF compatibility).
  */
 
-.fivefy-app.is-panel {
+.fivefly-app.is-panel {
     position: absolute;
     inset: 0;
     display: grid;
@@ -191,7 +191,7 @@
     gap: 0.5rem;
 }
 
-.is-panel .fivefy-screen {
+.is-panel .fivefly-screen {
     position: relative;
     inset: auto;
     flex: 1;
@@ -201,7 +201,7 @@
     scrollbar-color: var(--line) transparent;
 }
 
-.is-panel .fivefy-screen--player {
+.is-panel .fivefly-screen--player {
     overflow-y: auto;
 }
 
@@ -376,7 +376,7 @@
 }
 
 @media (max-width: 960px) {
-    .fivefy-app.is-panel {
+    .fivefly-app.is-panel {
         grid-template-columns: 4.5rem minmax(0, 1fr);
     }
 
@@ -394,4 +394,14 @@
     .panel-nowbar-tools .volume-inline input {
         display: none;
     }
+}
+
+.panel-nowbar-tools .output-chip,
+.panel-nowbar-tools .queue-button,
+.panel-nowbar-tools > .icon-button {
+    flex: none;
+}
+
+.panel-nowbar-tools .volume-inline input[type="range"] {
+    width: 5.5rem;
 }

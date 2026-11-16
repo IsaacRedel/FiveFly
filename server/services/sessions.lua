@@ -1,8 +1,8 @@
 --- Per-player playback sessions (queue, current track, repeat/shuffle). In memory only.
-FiveFY.Sessions = {}
+FiveFly.Sessions = {}
 
-local Sessions = FiveFY.Sessions
-local Utils = FiveFY.Utils
+local Sessions = FiveFly.Sessions
+local Utils = FiveFly.Utils
 
 ---@class Session
 ---@field queue Track[]
@@ -88,18 +88,18 @@ local function setRepeat(session, mode)
 end
 
 local function recordPlay(source, track)
-    local userId = FiveFY.Identity.GetUserId(source)
+    local userId = FiveFly.Identity.GetUserId(source)
 
     if userId then
-        FiveFY.Repo.Tracks.AddHistory(userId, track)
+        FiveFly.Repo.Tracks.AddHistory(userId, track)
     end
 end
 
 local function recordSkip(source, track)
-    local userId = FiveFY.Identity.GetUserId(source)
+    local userId = FiveFly.Identity.GetUserId(source)
 
     if userId then
-        FiveFY.Repo.Tracks.RecordStat(userId, track, "skip")
+        FiveFly.Repo.Tracks.RecordStat(userId, track, "skip")
     end
 end
 
@@ -130,7 +130,7 @@ end
 local function describeHost(hostSource, sourceInfo, session)
     return {
         source = hostSource,
-        host = FiveFY.Bridge.GetDisplayName(hostSource),
+        host = FiveFly.Bridge.GetDisplayName(hostSource),
         output = tostring(sourceInfo.sourceType or "prop"),
         currentTrack = Utils.NormalizeTrack(session.currentTrack),
         queueCount = #session.queue
@@ -141,7 +141,7 @@ end
 function Sessions.GetSharedSessions(source)
     local shared = {}
 
-    for hostSource, sourceInfo in pairs(FiveFY.ServerSync.GetSources()) do
+    for hostSource, sourceInfo in pairs(FiveFly.ServerSync.GetSources()) do
         local session = sessions[hostSource]
 
         if hostSource ~= source and session and session.currentTrack then
@@ -157,11 +157,11 @@ function Sessions.GetFriendsListening(source, userId)
     local candidates = {}
     local userIds = {}
 
-    for hostSource, sourceInfo in pairs(FiveFY.ServerSync.GetSources()) do
+    for hostSource, sourceInfo in pairs(FiveFly.ServerSync.GetSources()) do
         local session = sessions[hostSource]
 
         if hostSource ~= source and session and session.currentTrack then
-            local hostUserId = FiveFY.Identity.GetUserId(hostSource)
+            local hostUserId = FiveFly.Identity.GetUserId(hostSource)
 
             if hostUserId then
                 candidates[#candidates + 1] = { source = hostSource, userId = hostUserId, info = sourceInfo, session = session }
@@ -170,11 +170,11 @@ function Sessions.GetFriendsListening(source, userId)
         end
     end
 
-    local followed = FiveFY.Repo.Profiles.GetFollowedSet(userId, userIds)
+    local followed = FiveFly.Repo.Profiles.GetFollowedSet(userId, userIds)
     local friends = {}
 
     for _, candidate in ipairs(candidates) do
-        if followed[candidate.userId] and FiveFY.Repo.Profiles.CanShowActivity(candidate.userId) then
+        if followed[candidate.userId] and FiveFly.Repo.Profiles.CanShowActivity(candidate.userId) then
             local entry = describeHost(candidate.source, candidate.info, candidate.session)
             entry.userId = candidate.userId
             friends[#friends + 1] = entry
@@ -194,7 +194,7 @@ function Sessions.JoinSharedSession(source, targetSource)
 
     local hostSession = sessions[hostSource]
 
-    if not FiveFY.ServerSync.GetSources()[hostSource] or not hostSession or not hostSession.currentTrack then
+    if not FiveFly.ServerSync.GetSources()[hostSource] or not hostSession or not hostSession.currentTrack then
         return false, getSession(source), "session_not_found"
     end
 

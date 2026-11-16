@@ -5,14 +5,14 @@ import { Icon, type IconName } from "../components/Icon";
 import { useT } from "../i18n";
 import { isFavorite } from "../lib/tracks";
 import { Overlays } from "../sheets/Overlays";
-import { useFiveFY } from "../state/store";
+import { useFiveFly } from "../state/store";
 import type { AppView } from "../types";
 import { OUTPUT_ICONS, OUTPUT_LABELS, SeekBar, TransportControls, VolumeControl } from "../views/PlayerView";
 import { CurrentView } from "./views";
 
 function Sidebar() {
     const t = useT();
-    const { view, data, selectedPlaylist, actions } = useFiveFY();
+    const { view, data, selectedPlaylist, actions } = useFiveFly();
     const items: Array<{ view: AppView; icon: IconName; label: string }> = [
         { view: "home", icon: "home", label: t("nav.home") },
         { view: "search", icon: "search", label: t("nav.search") },
@@ -23,7 +23,7 @@ function Sidebar() {
         <aside className="panel-sidebar">
             <div className="panel-brand">
                 <span className="panel-brand-mark" aria-hidden="true" />
-                <strong>FiveFY</strong>
+                <strong>FiveFly</strong>
             </div>
 
             <nav className="panel-nav">
@@ -83,7 +83,7 @@ function Sidebar() {
 
 function NowPlayingBar() {
     const t = useT();
-    const { currentTrack, data, view, actions } = useFiveFY();
+    const { currentTrack, data, view, actions } = useFiveFly();
     const { audio, playback, library } = data;
     const upNext = Math.max(0, playback.queue.length - Math.max(1, playback.currentIndex || 1));
 
@@ -136,7 +136,7 @@ function NowPlayingBar() {
 /** Wide layout rendered in the engine page and opened by command/key binding. */
 export function PanelShell({ onClose }: { onClose: () => void }) {
     const t = useT();
-    const { view, sheet, data, actions } = useFiveFY();
+    const { view, sheet, data, actions } = useFiveFly();
 
     useEffect(() => {
         const onKeyDown = (event: KeyboardEvent) => {
@@ -156,7 +156,7 @@ export function PanelShell({ onClose }: { onClose: () => void }) {
     }, [sheet, actions, onClose]);
 
     return (
-        <main className="fivefy-app is-panel">
+        <main className="fivefly-app is-panel">
             <Sidebar />
 
             <section className="panel-main">
@@ -174,7 +174,7 @@ export function PanelShell({ onClose }: { onClose: () => void }) {
                         </button>
                     </div>
                 </header>
-                <div key={view} className={`fivefy-screen fivefy-screen--${view}`}>
+                <div key={view} className={`fivefly-screen fivefly-screen--${view}`}>
                     <CurrentView panel />
                 </div>
             </section>

@@ -2,7 +2,7 @@ import type { NuiResponse } from "../types";
 
 export type UiOrigin = "phone" | "panel";
 
-type FiveFYWindow = Window & {
+type FiveFlyWindow = Window & {
     GetParentResourceName?: () => string;
     resourceName?: string;
     components?: { setGallery?: (options: unknown) => void };
@@ -10,7 +10,7 @@ type FiveFYWindow = Window & {
     SetGallery?: (options: unknown) => void;
 };
 
-const fivefyWindow = (typeof window !== "undefined" ? window : {}) as FiveFYWindow;
+const fiveflyWindow = (typeof window !== "undefined" ? window : {}) as FiveFlyWindow;
 let uiOrigin: UiOrigin = "phone";
 
 /** Set once by each shell so the client knows which UI started playback. */
@@ -23,11 +23,11 @@ export function getUiOrigin() {
 }
 
 function hasNuiParent() {
-    return typeof fivefyWindow.GetParentResourceName === "function";
+    return typeof fiveflyWindow.GetParentResourceName === "function";
 }
 
 function hasLbPhoneResourceName() {
-    return typeof fivefyWindow.resourceName === "string" && fivefyWindow.resourceName.length > 0;
+    return typeof fiveflyWindow.resourceName === "string" && fiveflyWindow.resourceName.length > 0;
 }
 
 /** True in a regular browser (vite dev server, preview, GitHub Pages demo). */
@@ -36,9 +36,9 @@ export function isDevMode() {
 }
 
 export function getResourceName() {
-    if (hasLbPhoneResourceName()) return fivefyWindow.resourceName as string;
-    if (hasNuiParent()) return (fivefyWindow.GetParentResourceName as () => string)();
-    return "fivefy";
+    if (hasLbPhoneResourceName()) return fiveflyWindow.resourceName as string;
+    if (hasNuiParent()) return (fiveflyWindow.GetParentResourceName as () => string)();
+    return "fivefly";
 }
 
 export async function fetchNui<T>(action: string, payload: Record<string, unknown> = {}, fallback?: T): Promise<NuiResponse<T>> {
@@ -65,7 +65,7 @@ export async function fetchNui<T>(action: string, payload: Record<string, unknow
 
 /** Opens the lb-phone gallery picker. Resolves null outside lb-phone or when cancelled. */
 export function selectLbPhoneGalleryPhoto(): Promise<string | null> {
-    const setGallery = fivefyWindow.components?.setGallery || fivefyWindow.setGallery || fivefyWindow.SetGallery;
+    const setGallery = fiveflyWindow.components?.setGallery || fiveflyWindow.setGallery || fiveflyWindow.SetGallery;
 
     if (typeof setGallery !== "function") {
         return Promise.resolve(null);
@@ -105,7 +105,7 @@ export function selectLbPhoneGalleryPhoto(): Promise<string | null> {
 }
 
 export function hasLbPhoneGallery() {
-    return typeof (fivefyWindow.components?.setGallery || fivefyWindow.setGallery || fivefyWindow.SetGallery) === "function";
+    return typeof (fiveflyWindow.components?.setGallery || fiveflyWindow.setGallery || fiveflyWindow.SetGallery) === "function";
 }
 
 export async function copyTextToClipboard(text: string) {

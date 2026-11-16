@@ -1,9 +1,9 @@
 --- Music search with pluggable providers and a bounded in-memory cache.
-FiveFY.Search = {}
+FiveFly.Search = {}
 
-local Search = FiveFY.Search
-local Parser = FiveFY.SearchParser
-local Utils = FiveFY.Utils
+local Search = FiveFly.Search
+local Parser = FiveFly.SearchParser
+local Utils = FiveFly.Utils
 
 local cache = {}
 local cacheSize = 0
@@ -24,7 +24,15 @@ local function decodeJson(text)
 end
 
 local function getApiKey()
-    return GetConvar("fivefy_youtube_key", "")
+    return GetConvar("fivefly_youtube_key", "")
+end
+
+local function getRegion()
+    return Config.Search.RegionCode or (FiveFly.GetLocale() == "pt-BR" and "BR" or "US")
+end
+
+local function getLanguage()
+    return Config.Search.Language or (FiveFly.GetLocale() == "pt-BR" and "pt" or "en")
 end
 
 ---@type table<string, fun(query: string): table[]|nil, string|nil>
@@ -39,12 +47,12 @@ providers.youtube_api = function(query)
 
     local maxResults = math.min(50, Config.Search.MaxResults)
     local searchUrl = ("https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&maxResults=%d&q=%s&regionCode=%s&relevanceLanguage=%s&key=%s")
-        :format(maxResults, Parser.UrlEncode(query), Parser.UrlEncode(Config.Search.RegionCode or "US"),
-            Parser.UrlEncode(Config.Search.Language or "en"), Parser.UrlEncode(apiKey))
+        :format(maxResults, Parser.UrlEncode(query), Parser.UrlEncode(getRegion()),
+            Parser.UrlEncode(getLanguage()), Parser.UrlEncode(apiKey))
     local searchResponse = httpGet(searchUrl)
 
     if searchResponse.status ~= 200 then
-        FiveFY.Log("warn", "YouTube Data API search failed with HTTP %s", tostring(searchResponse.status))
+        FiveFly.Log("warn", FiveFly.T("log.youtube_api_failed", tostring(searchResponse.status)))
         return nil, "search_unavailable"
     end
 
@@ -80,7 +88,7 @@ end
 providers.scrape = function(query)
     local response = httpGet("https://www.youtube.com/results?search_query=" .. Parser.UrlEncode(query), {
         ["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
-        ["Accept-Language"] = ("%s,en;q=0.8"):format(Config.Search.Language or "en")
+        ["Accept-Language"] = ("%s,en;q=0.8"):format(getLanguage())
     })
 
     if response.status ~= 200 then
@@ -90,7 +98,7 @@ providers.scrape = function(query)
     local results = Parser.ParseScrapedPage(response.body, Config.Search.MaxResults, json.decode)
 
     if not results then
-        FiveFY.Log("warn", "could not parse the YouTube results page; set the fivefy_youtube_key convar to use the official API")
+        FiveFly.Log("warn", FiveFly.T("log.scrape_parse_failed"))
         return nil, "search_parse_failed"
     end
 
@@ -165,8 +173,8 @@ CreateThread(function()
     Wait(1000)
 
     if getProviderName() == "scrape" then
-        FiveFY.Log("info", "search provider: scrape (experimental). Set the fivefy_youtube_key convar for the official YouTube Data API.")
+        FiveFly.Log("info", FiveFly.T("log.scrape_provider"))
     else
-        FiveFY.Log("debug", "search provider: %s", getProviderName())
+        FiveFly.Log("debug", "search provider: %s", getProviderName())
     end
 end)

@@ -1,5 +1,5 @@
 --- Bridge to the hidden audio engine page (ui/engine), which plays the local track and nearby speakers.
-FiveFY.AudioEngine = {
+FiveFly.AudioEngine = {
     ready = false,
     lastSession = nil,
     masterVolume = 100,
@@ -10,14 +10,14 @@ FiveFY.AudioEngine = {
     }
 }
 
-local clampVolume = FiveFY.Utils.ClampVolume
+local clampVolume = FiveFly.Utils.ClampVolume
 
-function FiveFY.AudioEngine.IsReady()
-    return FiveFY.AudioEngine.ready == true
+function FiveFly.AudioEngine.IsReady()
+    return FiveFly.AudioEngine.ready == true
 end
 
-function FiveFY.AudioEngine.HasActiveSession()
-    local session = FiveFY.AudioEngine.lastSession
+function FiveFly.AudioEngine.HasActiveSession()
+    local session = FiveFly.AudioEngine.lastSession
     return type(session) == "table" and type(session.currentTrack) == "table"
 end
 
@@ -30,15 +30,15 @@ local function sendEngineMessage(action, payload)
 end
 
 local function getOutput()
-    return tostring(FiveFY.Bluetooth.GetOutput() or "private")
+    return tostring(FiveFly.Bluetooth.GetOutput() or "private")
 end
 
-function FiveFY.AudioEngine.PlaySession(session)
+function FiveFly.AudioEngine.PlaySession(session)
     if type(session) ~= "table" or type(session.currentTrack) ~= "table" then
         return false
     end
 
-    FiveFY.AudioEngine.lastSession = session
+    FiveFly.AudioEngine.lastSession = session
 
     sendEngineMessage("engine.play", {
         track = session.currentTrack,
@@ -47,18 +47,18 @@ function FiveFY.AudioEngine.PlaySession(session)
         }
     })
 
-    FiveFY.Sync.SetCurrentSession(session)
+    FiveFly.Sync.SetCurrentSession(session)
 
     return true
 end
 
 --- Updates the stored session (queue, modes, position) without restarting the current track.
-function FiveFY.AudioEngine.UpdateSession(session)
-    FiveFY.AudioEngine.lastSession = session
-    FiveFY.Sync.SetCurrentSession(session)
+function FiveFly.AudioEngine.UpdateSession(session)
+    FiveFly.AudioEngine.lastSession = session
+    FiveFly.Sync.SetCurrentSession(session)
 end
 
-function FiveFY.AudioEngine.Transport(action)
+function FiveFly.AudioEngine.Transport(action)
     local safeAction = tostring(action or "")
 
     if safeAction == "pause" then
@@ -73,10 +73,10 @@ function FiveFY.AudioEngine.Transport(action)
 
     if safeAction == "stop" then
         sendEngineMessage("engine.stop")
-        FiveFY.AudioEngine.lastSession = nil
+        FiveFly.AudioEngine.lastSession = nil
 
-        if FiveFY.Sync then
-            FiveFY.Sync.ClearCurrentSession()
+        if FiveFly.Sync then
+            FiveFly.Sync.ClearCurrentSession()
         end
 
         return true
@@ -85,11 +85,11 @@ function FiveFY.AudioEngine.Transport(action)
     return false
 end
 
-function FiveFY.AudioEngine.GetEffectiveVolume(value)
-    return FiveFY.AudioEngine.GetExternalVolume(value)
+function FiveFly.AudioEngine.GetEffectiveVolume(value)
+    return FiveFly.AudioEngine.GetExternalVolume(value)
 end
 
-function FiveFY.AudioEngine.GetLocalVolume(value)
+function FiveFly.AudioEngine.GetLocalVolume(value)
     local safeValue = clampVolume(value)
     local output = getOutput()
 
@@ -106,19 +106,19 @@ function FiveFY.AudioEngine.GetLocalVolume(value)
     return safeValue
 end
 
-function FiveFY.AudioEngine.GetExternalVolume(value)
+function FiveFly.AudioEngine.GetExternalVolume(value)
     local safeValue = clampVolume(value)
     return safeValue
 end
 
 --- Re-applies the volume after an output change (the local volume depends on the output).
-function FiveFY.AudioEngine.SetOutput()
-    FiveFY.AudioEngine.SetVolume(FiveFY.Volume.value, FiveFY.Volume.muted)
+function FiveFly.AudioEngine.SetOutput()
+    FiveFly.AudioEngine.SetVolume(FiveFly.Volume.value, FiveFly.Volume.muted)
 end
 
-function FiveFY.AudioEngine.SetVolume(value, muted)
-    local localValue = FiveFY.AudioEngine.GetLocalVolume(value)
-    local externalValue = FiveFY.AudioEngine.GetExternalVolume(value)
+function FiveFly.AudioEngine.SetVolume(value, muted)
+    local localValue = FiveFly.AudioEngine.GetLocalVolume(value)
+    local externalValue = FiveFly.AudioEngine.GetExternalVolume(value)
 
     sendEngineMessage("engine.volume", {
         value = localValue,
@@ -129,16 +129,16 @@ function FiveFY.AudioEngine.SetVolume(value, muted)
     })
 end
 
-function FiveFY.AudioEngine.SetMasterVolume(value)
+function FiveFly.AudioEngine.SetMasterVolume(value)
     local safeValue = clampVolume(value)
-    FiveFY.AudioEngine.masterVolume = safeValue
+    FiveFly.AudioEngine.masterVolume = safeValue
 
     sendEngineMessage("engine.masterVolume", {
         value = safeValue
     })
 end
 
-function FiveFY.AudioEngine.Seek(position)
+function FiveFly.AudioEngine.Seek(position)
     local safePosition = tonumber(position) or 0
     safePosition = math.max(0, safePosition)
 
@@ -147,21 +147,21 @@ function FiveFY.AudioEngine.Seek(position)
     })
 end
 
-function FiveFY.AudioEngine.AddExternalSource(sourceId, payload)
+function FiveFly.AudioEngine.AddExternalSource(sourceId, payload)
     sendEngineMessage("engine.external.add", {
         sourceId = tostring(sourceId),
         source = payload or {}
     })
 end
 
-function FiveFY.AudioEngine.UpdateExternalSource(sourceId, payload)
+function FiveFly.AudioEngine.UpdateExternalSource(sourceId, payload)
     sendEngineMessage("engine.external.update", {
         sourceId = tostring(sourceId),
         source = payload or {}
     })
 end
 
-function FiveFY.AudioEngine.SetExternalVolume(sourceId, volume)
+function FiveFly.AudioEngine.SetExternalVolume(sourceId, volume)
     local safeVolume = tonumber(volume) or 0
     safeVolume = math.max(0, math.min(100, math.floor(safeVolume + 0.5)))
 
@@ -171,23 +171,23 @@ function FiveFY.AudioEngine.SetExternalVolume(sourceId, volume)
     })
 end
 
-function FiveFY.AudioEngine.RemoveExternalSource(sourceId)
+function FiveFly.AudioEngine.RemoveExternalSource(sourceId)
     sendEngineMessage("engine.external.remove", {
         sourceId = tostring(sourceId)
     })
 end
 
 RegisterNUICallback("engine.ready", function(_, cb)
-    FiveFY.AudioEngine.ready = true
+    FiveFly.AudioEngine.ready = true
 
-    if FiveFY.Volume then
-        FiveFY.AudioEngine.SetVolume(FiveFY.Volume.value, FiveFY.Volume.muted)
+    if FiveFly.Volume then
+        FiveFly.AudioEngine.SetVolume(FiveFly.Volume.value, FiveFly.Volume.muted)
     end
 
-    FiveFY.AudioEngine.SetMasterVolume(FiveFY.AudioEngine.masterVolume)
+    FiveFly.AudioEngine.SetMasterVolume(FiveFly.AudioEngine.masterVolume)
 
-    if FiveFY.AudioEngine.lastSession then
-        FiveFY.AudioEngine.PlaySession(FiveFY.AudioEngine.lastSession)
+    if FiveFly.AudioEngine.lastSession then
+        FiveFly.AudioEngine.PlaySession(FiveFly.AudioEngine.lastSession)
     end
 
     cb({
@@ -196,13 +196,13 @@ RegisterNUICallback("engine.ready", function(_, cb)
 end)
 
 RegisterNUICallback("engine.progress", function(data, cb)
-    FiveFY.AudioEngine.progress = {
+    FiveFly.AudioEngine.progress = {
         videoId = type(data) == "table" and data.videoId or nil,
         position = tonumber(type(data) == "table" and data.position or 0) or 0,
         duration = tonumber(type(data) == "table" and data.duration or 0) or 0
     }
 
-    FiveFY.SendUiMessage("playback.progress", FiveFY.AudioEngine.progress)
+    FiveFly.SendUiMessage("playback.progress", FiveFly.AudioEngine.progress)
 
     cb({
         ok = true
@@ -210,12 +210,12 @@ RegisterNUICallback("engine.progress", function(data, cb)
 end)
 
 RegisterNUICallback("engine.ended", function(_, cb)
-    FiveFY.Nui.HandleTrackEnded()
+    FiveFly.Nui.HandleTrackEnded()
     cb({ ok = true })
 end)
 
 RegisterNUICallback("engine.error", function(data, cb)
-    FiveFY.SendUiMessage("playback.error", type(data) == "table" and data or {
+    FiveFly.SendUiMessage("playback.error", type(data) == "table" and data or {
         error = "engine_error"
     })
 
@@ -228,7 +228,7 @@ end)
 
 local function setMasterVolumeFromExport(first, second)
     -- Accepts (volume) or (self, volume) for mixers that call exports with a table first.
-    FiveFY.AudioEngine.SetMasterVolume(type(first) == "table" and second or first)
+    FiveFly.AudioEngine.SetMasterVolume(type(first) == "table" and second or first)
 end
 
 exports("SetMasterVolume", setMasterVolumeFromExport)
@@ -249,7 +249,7 @@ local function readMixerVolume()
     end)
 
     if ok and tonumber(volume) then
-        FiveFY.AudioEngine.SetMasterVolume(volume)
+        FiveFly.AudioEngine.SetMasterVolume(volume)
     end
 end
 

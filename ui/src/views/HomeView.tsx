@@ -2,7 +2,7 @@ import { Artwork } from "../components/common";
 import { Icon, type IconName } from "../components/Icon";
 import { greetingKey, translateSection, useT } from "../i18n";
 import { useHorizontalDragScroll } from "../lib/useHorizontalDragScroll";
-import { useFiveFY } from "../state/store";
+import { useFiveFly } from "../state/store";
 import type { Track } from "../types";
 
 type Tile = {
@@ -17,7 +17,7 @@ type Tile = {
 
 function QuickGrid() {
     const t = useT();
-    const { data, currentTrack, isPlaying, actions } = useFiveFY();
+    const { data, currentTrack, isPlaying, actions } = useFiveFly();
     const { library } = data;
     const recommendation = library.recommendations.find((section) => section.id === "time" && section.tracks.length > 0)
         || library.recommendations.find((section) => section.tracks.length > 0);
@@ -87,7 +87,7 @@ function QuickGrid() {
 
 function Stations() {
     const t = useT();
-    const { data, actions } = useFiveFY();
+    const { data, actions } = useFiveFly();
     const drag = useHorizontalDragScroll<HTMLDivElement>();
     const { stations } = data.library;
 
@@ -116,7 +116,7 @@ function Stations() {
 
 function MadeForYou() {
     const t = useT();
-    const { data, actions } = useFiveFY();
+    const { data, actions } = useFiveFly();
     const drag = useHorizontalDragScroll<HTMLDivElement>();
     const { recommendations, smartPlaylists } = data.library;
 
@@ -155,7 +155,7 @@ function MadeForYou() {
 
 function KeepListening() {
     const t = useT();
-    const { data, actions } = useFiveFY();
+    const { data, actions } = useFiveFly();
     const { history, playlists } = data.library;
 
     const items = [
@@ -202,7 +202,7 @@ function KeepListening() {
 
 export function LiveSessions({ limit = 2 }: { limit?: number }) {
     const t = useT();
-    const { data, actions } = useFiveFY();
+    const { data, actions } = useFiveFly();
     // Only profiles the player follows (and that allow showing activity), as filtered by the server.
     const sessions = data.library.friendsListening;
 
@@ -232,7 +232,7 @@ export function LiveSessions({ limit = 2 }: { limit?: number }) {
 
 export function HomeView({ showHeader = true }: { showHeader?: boolean }) {
     const t = useT();
-    const { data, actions } = useFiveFY();
+    const { data, actions } = useFiveFly();
 
     return (
         <div className="view-stack home-view">

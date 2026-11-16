@@ -2,7 +2,7 @@
  * Persistent audio engine (hidden). Plays the player's own track and the speakers/vehicles of nearby
  * players, driven by `{ target: "audio-engine" }` messages from client/audio_engine.lua.
  */
-const resourceName = typeof GetParentResourceName === "function" ? GetParentResourceName() : "fivefy";
+const resourceName = typeof GetParentResourceName === "function" ? GetParentResourceName() : "fivefly";
 const FADE_DURATION_MS = 220;
 const FADE_STEP_MS = 35;
 

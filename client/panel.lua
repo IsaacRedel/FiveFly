@@ -1,9 +1,9 @@
 --- Desktop panel: a larger UI rendered in the same page as the audio engine (ui/engine/index.html).
-FiveFY.Panel = {
+FiveFly.Panel = {
     open = false
 }
 
-local Panel = FiveFY.Panel
+local Panel = FiveFly.Panel
 
 local function setOpen(open)
     if Panel.open == open then
@@ -51,12 +51,12 @@ RegisterNUICallback("panel.close", function(_, cb)
 end)
 
 if Config.Panel.Enabled then
-    local command = tostring(Config.Panel.Command or "fivefy")
+    local command = tostring(Config.Panel.Command or "fivefly")
 
     RegisterCommand(command, Panel.Toggle, false)
 
     if Config.Panel.DefaultKey ~= nil then
-        RegisterKeyMapping(command, Config.Panel.KeyDescription or "Open FiveFY", "keyboard", Config.Panel.DefaultKey)
+        RegisterKeyMapping(command, Config.Panel.KeyDescription or FiveFly.T("panel.key_description"), "keyboard", Config.Panel.DefaultKey)
     end
 
     -- Close when the player dies while the panel is open.

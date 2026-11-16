@@ -4,7 +4,7 @@ import { Artwork, Sheet, TrackCopy } from "../components/common";
 import { Icon } from "../components/Icon";
 import { useT } from "../i18n";
 import { isFavorite } from "../lib/tracks";
-import { useFiveFY } from "../state/store";
+import { useFiveFly } from "../state/store";
 import type { OutputMode, Track } from "../types";
 import { OUTPUT_ICONS, OUTPUT_LABELS } from "../views/PlayerView";
 
@@ -13,7 +13,7 @@ const OUTPUT_DESCRIPTIONS = { prop: "output.propDesc", vehicle: "output.vehicleD
 
 function VolumeRow() {
     const t = useT();
-    const { data, actions } = useFiveFY();
+    const { data, actions } = useFiveFly();
     const { audio } = data;
 
     return (
@@ -33,7 +33,7 @@ function VolumeRow() {
 
 function AudioSheet({ onClose }: { onClose: () => void }) {
     const t = useT();
-    const { data, actions } = useFiveFY();
+    const { data, actions } = useFiveFly();
 
     return (
         <Sheet className="output-sheet" title={t("output.title")} onClose={onClose}>
@@ -55,10 +55,10 @@ function AudioSheet({ onClose }: { onClose: () => void }) {
 
 function SettingsSheet({ onClose }: { onClose: () => void }) {
     const t = useT();
-    const { data, actions } = useFiveFY();
+    const { data, actions } = useFiveFly();
 
     return (
-        <Sheet className="settings-sheet" kicker="FiveFY" title={t("common.settings")} onClose={onClose}>
+        <Sheet className="settings-sheet" kicker="FiveFly" title={t("common.settings")} onClose={onClose}>
             <div className="settings-output-grid">
                 {OUTPUTS.map((output) => (
                     <button className={data.audio.output === output ? "active" : ""} type="button" key={output} onClick={() => actions.chooseOutput(output)}>
@@ -90,7 +90,7 @@ function SettingsSheet({ onClose }: { onClose: () => void }) {
 
 function ProfileEditSheet({ onClose }: { onClose: () => void }) {
     const t = useT();
-    const { data, actions } = useFiveFY();
+    const { data, actions } = useFiveFly();
     const { profile } = data;
     const [bio, setBio] = useState(profile.bio || "");
     const [avatar, setAvatar] = useState(profile.avatar || "");
@@ -151,7 +151,7 @@ function ProfileEditSheet({ onClose }: { onClose: () => void }) {
 
 function QueueSheet({ onClose }: { onClose: () => void }) {
     const t = useT();
-    const { data, actions } = useFiveFY();
+    const { data, actions } = useFiveFly();
     const { playback } = data;
     const currentIndex = Math.max(0, (playback.currentIndex || 1) - 1);
     const currentTrack = playback.currentTrack || playback.queue[currentIndex] || null;
@@ -219,7 +219,7 @@ function QueueSheet({ onClose }: { onClose: () => void }) {
 
 function TrackActionSheet({ track, onClose }: { track: Track; onClose: () => void }) {
     const t = useT();
-    const { data, view, selectedPlaylist, actions } = useFiveFY();
+    const { data, view, selectedPlaylist, actions } = useFiveFly();
     const favorite = isFavorite(track, data.library.favorites);
     const inPlaylist = view === "playlist" && !!selectedPlaylist;
 
@@ -267,7 +267,7 @@ function TrackActionSheet({ track, onClose }: { track: Track; onClose: () => voi
 
 function PlaylistSelectSheet({ track, onClose }: { track: Track; onClose: () => void }) {
     const t = useT();
-    const { data, actions } = useFiveFY();
+    const { data, actions } = useFiveFly();
 
     return (
         <Sheet className="playlist-select-sheet" kicker={t("playlistSelect.kicker")} title={track.title} onClose={onClose}>
@@ -328,7 +328,7 @@ function InputSheet({ className, title, kicker, initial = "", placeholder, maxLe
 
 export function Overlays() {
     const t = useT();
-    const { sheet, selectedPlaylist, actions } = useFiveFY();
+    const { sheet, selectedPlaylist, actions } = useFiveFly();
     const close = () => actions.setSheet(null);
 
     if (!sheet) return null;

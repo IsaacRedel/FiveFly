@@ -1,12 +1,12 @@
 import { useT } from "../i18n";
-import { useFiveFY } from "../state/store";
+import { useFiveFly } from "../state/store";
 import type { AppView } from "../types";
 import { Artwork, TrackCopy } from "./common";
 import { Icon, type IconName } from "./Icon";
 
 export function BottomNav() {
     const t = useT();
-    const { view, actions } = useFiveFY();
+    const { view, actions } = useFiveFly();
     const items: Array<{ view: AppView; icon: IconName; label: string }> = [
         { view: "home", icon: "home", label: t("nav.home") },
         { view: "search", icon: "search", label: t("nav.search") },
@@ -27,7 +27,7 @@ export function BottomNav() {
 
 export function MiniPlayer() {
     const t = useT();
-    const { currentTrack, isPlaying, playbackBusy, actions } = useFiveFY();
+    const { currentTrack, isPlaying, playbackBusy, actions } = useFiveFly();
 
     if (!currentTrack) return null;
 
@@ -48,7 +48,7 @@ export function MiniPlayer() {
 }
 
 export function Toasts() {
-    const { error, notice, actions } = useFiveFY();
+    const { error, notice, actions } = useFiveFly();
 
     if (error) {
         return (

@@ -25,7 +25,7 @@ window.addEventListener("message", (event: MessageEvent) => {
         panelModule ??= import("./panel");
         panelModule.then((panel) => panel.openPanel()).catch((error) => {
             // A failed chunk must not leave the player with a captured cursor and no UI.
-            console.error("[fivefy] could not load the panel", error);
+            console.error("[fivefly] could not load the panel", error);
             panelModule = null;
             forceClose();
         });
@@ -36,7 +36,7 @@ window.addEventListener("message", (event: MessageEvent) => {
 
 // Safety net: Esc always closes the panel when its UI did not render (the panel handles Esc itself otherwise).
 window.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && container.classList.contains("is-open") && !container.querySelector(".fivefy-app")) {
+    if (event.key === "Escape" && container.classList.contains("is-open") && !container.querySelector(".fivefly-app")) {
         forceClose();
     }
 });

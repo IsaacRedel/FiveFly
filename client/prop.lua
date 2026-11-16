@@ -1,10 +1,10 @@
 
-FiveFY.Prop = {
+FiveFly.Prop = {
     entity = nil,
     netId = nil
 }
 
-function FiveFY.Prop.GetModel()
+function FiveFly.Prop.GetModel()
     return Config.Prop.Model
 end
 
@@ -53,17 +53,17 @@ local function attachToPlayer(entity)
     )
 end
 
-function FiveFY.Prop.Exists()
-    return FiveFY.Prop.entity and DoesEntityExist(FiveFY.Prop.entity)
+function FiveFly.Prop.Exists()
+    return FiveFly.Prop.entity and DoesEntityExist(FiveFly.Prop.entity)
 end
 
-function FiveFY.Prop.Ensure()
-    if FiveFY.Prop.Exists() then
-        if not IsEntityAttached(FiveFY.Prop.entity) then
-            attachToPlayer(FiveFY.Prop.entity)
+function FiveFly.Prop.Ensure()
+    if FiveFly.Prop.Exists() then
+        if not IsEntityAttached(FiveFly.Prop.entity) then
+            attachToPlayer(FiveFly.Prop.entity)
         end
 
-        return FiveFY.Prop.entity, FiveFY.Prop.netId
+        return FiveFly.Prop.entity, FiveFly.Prop.netId
     end
 
     local modelHash = loadModel(Config.Prop.Model)
@@ -82,27 +82,27 @@ function FiveFY.Prop.Ensure()
     SetEntityAsMissionEntity(entity, true, true)
     attachToPlayer(entity)
 
-    FiveFY.Prop.entity = entity
-    FiveFY.Prop.netId = NetworkGetNetworkIdFromEntity(entity)
+    FiveFly.Prop.entity = entity
+    FiveFly.Prop.netId = NetworkGetNetworkIdFromEntity(entity)
 
-    return FiveFY.Prop.entity, FiveFY.Prop.netId
+    return FiveFly.Prop.entity, FiveFly.Prop.netId
 end
 
-function FiveFY.Prop.GetCoords()
-    if not FiveFY.Prop.Exists() then
+function FiveFly.Prop.GetCoords()
+    if not FiveFly.Prop.Exists() then
         return nil
     end
 
-    return GetEntityCoords(FiveFY.Prop.entity)
+    return GetEntityCoords(FiveFly.Prop.entity)
 end
 
-function FiveFY.Prop.Delete()
-    if FiveFY.Prop.Exists() then
-        DeleteEntity(FiveFY.Prop.entity)
+function FiveFly.Prop.Delete()
+    if FiveFly.Prop.Exists() then
+        DeleteEntity(FiveFly.Prop.entity)
     end
 
-    FiveFY.Prop.entity = nil
-    FiveFY.Prop.netId = nil
+    FiveFly.Prop.entity = nil
+    FiveFly.Prop.netId = nil
 end
 
 AddEventHandler("onClientResourceStop", function(resourceName)
@@ -110,5 +110,5 @@ AddEventHandler("onClientResourceStop", function(resourceName)
         return
     end
 
-    FiveFY.Prop.Delete()
+    FiveFly.Prop.Delete()
 end)

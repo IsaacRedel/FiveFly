@@ -1,10 +1,10 @@
 import { Artwork, EmptyState, TabButton, TrackList } from "../components/common";
 import { useT } from "../i18n";
-import { useFiveFY } from "../state/store";
+import { useFiveFly } from "../state/store";
 
 export function LibraryView() {
     const t = useT();
-    const { libraryTab: tab, data, actions } = useFiveFY();
+    const { libraryTab: tab, data, actions } = useFiveFly();
     const { library } = data;
     const tracks = tab === "favorites" ? library.favorites : library.history;
 

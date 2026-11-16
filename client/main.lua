@@ -1,26 +1,26 @@
-FiveFY = FiveFY or {}
+FiveFly = FiveFly or {}
 
-FiveFY.Volume = {
+FiveFly.Volume = {
     value = 100,
     muted = false
 }
 
 --- Where the current playback was started from ("phone" or "panel"). Used by the phone item guard.
-FiveFY.PlaybackOrigin = nil
+FiveFly.PlaybackOrigin = nil
 
 local function getPhoneResource()
     return Config.Phone.Resource or "lb-phone"
 end
 
-function FiveFY.IsPhoneAvailable()
+function FiveFly.IsPhoneAvailable()
     return Config.Phone.Enabled == true and GetResourceState(getPhoneResource()) == "started"
 end
 
 --- Sends a state update to every UI: the lb-phone app (when available) and the panel/engine page.
-function FiveFY.SendUiMessage(action, data)
+function FiveFly.SendUiMessage(action, data)
     local message = { action = action, data = data or {} }
 
-    if FiveFY.IsPhoneAvailable() then
+    if FiveFly.IsPhoneAvailable() then
         pcall(function()
             exports[getPhoneResource()]:SendCustomAppMessage(Config.Phone.Identifier, message)
         end)
@@ -29,7 +29,7 @@ function FiveFY.SendUiMessage(action, data)
     SendNUIMessage({ target = "ui", action = action, data = message.data })
 end
 
-function FiveFY.GetEmptyPlaybackState()
+function FiveFly.GetEmptyPlaybackState()
     return {
         queue = {},
         currentTrack = nil,
@@ -39,20 +39,20 @@ function FiveFY.GetEmptyPlaybackState()
     }
 end
 
-function FiveFY.StopPlayback(reason)
-    FiveFY.AudioEngine.Transport("stop")
-    FiveFY.PlaybackOrigin = nil
+function FiveFly.StopPlayback(reason)
+    FiveFly.AudioEngine.Transport("stop")
+    FiveFly.PlaybackOrigin = nil
 
-    FiveFY.Nui.RequestServer("playback.transport", { action = "stop", reason = tostring(reason or "stopped") }, function() end)
-    FiveFY.SendUiMessage("playback.state", FiveFY.GetEmptyPlaybackState())
+    FiveFly.Nui.RequestServer("playback.transport", { action = "stop", reason = tostring(reason or "stopped") }, function() end)
+    FiveFly.SendUiMessage("playback.state", FiveFly.GetEmptyPlaybackState())
 end
 
-RegisterNetEvent("fivefy:client:forceStopPlayback", function(reason)
-    if FiveFY.Bluetooth.GetOutput() ~= "off" then
-        FiveFY.Bluetooth.SetOutput("off")
+RegisterNetEvent("fivefly:client:forceStopPlayback", function(reason)
+    if FiveFly.Bluetooth.GetOutput() ~= "off" then
+        FiveFly.Bluetooth.SetOutput("off")
     end
 
-    FiveFY.StopPlayback(reason or "force_stop")
+    FiveFly.StopPlayback(reason or "force_stop")
 end)
 
 ---------------------------------------------------------------------------------------------------
@@ -69,9 +69,9 @@ end
 
 local function isGuardActive()
     return Config.Phone.StopWithoutPhoneItem == true
-        and FiveFY.PlaybackOrigin == "phone"
-        and FiveFY.IsPhoneAvailable()
-        and FiveFY.AudioEngine.HasActiveSession()
+        and FiveFly.PlaybackOrigin == "phone"
+        and FiveFly.IsPhoneAvailable()
+        and FiveFly.AudioEngine.HasActiveSession()
 end
 
 local stopping = false
@@ -83,11 +83,11 @@ local function stopIfPhoneMissing()
 
     stopping = true
 
-    if FiveFY.Bluetooth.GetOutput() ~= "off" then
-        FiveFY.Bluetooth.SetOutput("off")
+    if FiveFly.Bluetooth.GetOutput() ~= "off" then
+        FiveFly.Bluetooth.SetOutput("off")
     end
 
-    FiveFY.StopPlayback("missing_phone")
+    FiveFly.StopPlayback("missing_phone")
 
     SetTimeout(2500, function()
         stopping = false

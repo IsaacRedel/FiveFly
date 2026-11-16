@@ -1,7 +1,7 @@
-local Actions = FiveFY.Actions
-local Utils = FiveFY.Utils
-local Tracks = FiveFY.Repo.Tracks
-local Playlists = FiveFY.Repo.Playlists
+local Actions = FiveFly.Actions
+local Utils = FiveFly.Utils
+local Tracks = FiveFly.Repo.Tracks
+local Playlists = FiveFly.Repo.Playlists
 
 local READ_MS <const> = Config.RateLimits.LibraryReadMs
 local WRITE_MS <const> = Config.RateLimits.LibraryWriteMs
@@ -42,7 +42,7 @@ Actions.Register("library.history.clear", {
 Actions.Register("library.smart-playlists.get", {
     rateLimit = READ_MS,
     handler = function(ctx)
-        return { playlists = FiveFY.Library.GetSmartPlaylists(ctx.userId) }
+        return { playlists = FiveFly.Library.GetSmartPlaylists(ctx.userId) }
     end
 })
 
@@ -71,7 +71,7 @@ Actions.Register("library.playlists.import", {
 Actions.Register("library.playlists.cover.set", {
     rateLimit = WRITE_MS,
     handler = function(ctx, payload)
-        local cover, mediaError = FiveFY.Media.ResolveImageUrl(payload.cover)
+        local cover, mediaError = FiveFly.Media.ResolveImageUrl(payload.cover)
 
         if cover == nil then
             return nil, mediaError

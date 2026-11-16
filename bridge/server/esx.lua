@@ -4,7 +4,7 @@ local function getPlayer(source)
     return ESX and ESX.GetPlayerFromId(source)
 end
 
-FiveFY.Bridge.Register({
+FiveFly.Bridge.Register({
     name = "esx",
     resource = "es_extended",
 

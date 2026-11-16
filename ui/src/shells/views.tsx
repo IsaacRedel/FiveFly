@@ -1,4 +1,4 @@
-import { useFiveFY } from "../state/store";
+import { useFiveFly } from "../state/store";
 import { HomeView } from "../views/HomeView";
 import { LibraryView } from "../views/LibraryView";
 import { PlayerView } from "../views/PlayerView";
@@ -8,7 +8,7 @@ import { SearchView } from "../views/SearchView";
 
 /** Renders the current view; both shells share it. */
 export function CurrentView({ panel = false }: { panel?: boolean }) {
-    const { view } = useFiveFY();
+    const { view } = useFiveFly();
 
     switch (view) {
         case "search":

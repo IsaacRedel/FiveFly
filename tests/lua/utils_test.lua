@@ -5,7 +5,7 @@ return {
         name = "ExtractVideoId accepts ids and common YouTube URLs",
         run = function()
             H.reset()
-            local extract = FiveFY.Utils.ExtractVideoId
+            local extract = FiveFly.Utils.ExtractVideoId
 
             H.eq(extract("dQw4w9WgXcQ"), "dQw4w9WgXcQ", "plain id")
             H.eq(extract("https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=10"), "dQw4w9WgXcQ", "watch url")
@@ -19,7 +19,7 @@ return {
         name = "NormalizeTrack rejects invalid data and trims fields",
         run = function()
             H.reset()
-            local normalize = FiveFY.Utils.NormalizeTrack
+            local normalize = FiveFly.Utils.NormalizeTrack
 
             H.eq(normalize(nil), nil, "nil track")
             H.eq(normalize({ title = "no id" }), nil, "missing id")
@@ -38,11 +38,11 @@ return {
         name = "NormalizeTrackList drops invalid entries and respects the limit",
         run = function()
             H.reset()
-            local list = FiveFY.Utils.NormalizeTrackList({ { videoId = "a" }, { title = "bad" }, { videoId = "b" }, { videoId = "c" } }, 2)
+            local list = FiveFly.Utils.NormalizeTrackList({ { videoId = "a" }, { title = "bad" }, { videoId = "b" }, { videoId = "c" } }, 2)
 
             H.eq(#list, 2, "size")
             H.eq(list[2].videoId, "b", "invalid skipped")
-            H.eq(#FiveFY.Utils.NormalizeTrackList("nope", 5), 0, "non-table input")
+            H.eq(#FiveFly.Utils.NormalizeTrackList("nope", 5), 0, "non-table input")
         end
     },
     {
@@ -50,7 +50,7 @@ return {
         run = function()
             H.reset()
             local attenuation = { nearRadius = 1.25, fadeStartRatio = 0.18, curve = 1.65 }
-            local volume = FiveFY.Utils.AttenuatedVolume
+            local volume = FiveFly.Utils.AttenuatedVolume
 
             H.eq(volume(0, 20, 80, attenuation), 80, "at the source")
             H.eq(volume(3, 20, 80, attenuation), 80, "before fade start (3.6m)")
@@ -66,10 +66,28 @@ return {
         name = "ClampVolume rounds and bounds values",
         run = function()
             H.reset()
-            H.eq(FiveFY.Utils.ClampVolume(150), 100, "upper bound")
-            H.eq(FiveFY.Utils.ClampVolume(-4), 0, "lower bound")
-            H.eq(FiveFY.Utils.ClampVolume("49.6"), 50, "string input rounded")
-            H.eq(FiveFY.Utils.ClampVolume(nil), 100, "default")
+            H.eq(FiveFly.Utils.ClampVolume(150), 100, "upper bound")
+            H.eq(FiveFly.Utils.ClampVolume(-4), 0, "lower bound")
+            H.eq(FiveFly.Utils.ClampVolume("49.6"), 50, "string input rounded")
+            H.eq(FiveFly.Utils.ClampVolume(nil), 100, "default")
+        end
+    },
+    {
+        name = "Lua texts follow Config.Locale with English fallback",
+        run = function()
+            H.reset()
+            H.eq(FiveFly.T("panel.key_description"), "Open FiveFly", "english")
+
+            Config.Locale = "pt-BR"
+            H.eq(FiveFly.T("panel.key_description"), "Abrir o FiveFly", "portuguese")
+            H.eq(FiveFly.T("log.framework", "qbx"), "framework: qbx", "formatted")
+
+            Config.Locale = "pt"
+            H.eq(FiveFly.GetLocale(), "pt-BR", "pt alias")
+
+            Config.Locale = "de"
+            H.eq(FiveFly.GetLocale(), "en", "unknown locale")
+            H.eq(FiveFly.T("missing.key"), "missing.key", "unknown key")
         end
     }
 }

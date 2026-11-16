@@ -4,8 +4,8 @@ local function load()
     local runtime = H.reset()
     local recorded = { plays = {}, skips = {} }
 
-    FiveFY.Identity = { GetUserId = function(src) return src * 10 end }
-    FiveFY.Repo = {
+    FiveFly.Identity = { GetUserId = function(src) return src * 10 end }
+    FiveFly.Repo = {
         Tracks = {
             AddHistory = function(userId, track) recorded.plays[#recorded.plays + 1] = userId .. ":" .. track.videoId end,
             RecordStat = function(userId, track, kind) if kind == "skip" then recorded.skips[#recorded.skips + 1] = userId .. ":" .. track.videoId end end
@@ -15,11 +15,11 @@ local function load()
             CanShowActivity = function() return true end
         }
     }
-    FiveFY.Bridge = { GetDisplayName = function(src) return "Host" .. src end }
-    FiveFY.ServerSync = { GetSources = function() return runtime.syncSources or {} end }
+    FiveFly.Bridge = { GetDisplayName = function(src) return "Host" .. src end }
+    FiveFly.ServerSync = { GetSources = function() return runtime.syncSources or {} end }
 
     dofile("server/services/sessions.lua")
-    return FiveFY.Sessions, recorded, runtime
+    return FiveFly.Sessions, recorded, runtime
 end
 
 local queue = {

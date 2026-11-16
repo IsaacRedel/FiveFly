@@ -1,5 +1,5 @@
 
-FiveFY.Vehicle = {
+FiveFly.Vehicle = {
     lastVehicle = nil,
     connectedVehicle = nil,
     connectedVehicleNetId = nil
@@ -124,56 +124,56 @@ local function connectAudioVehicle(vehicle)
     end
 
     -- Keep the selected emitter after detaching, until disconnect or entity removal.
-    FiveFY.Vehicle.connectedVehicle = vehicle
-    FiveFY.Vehicle.connectedVehicleNetId = NetworkGetNetworkIdFromEntity(vehicle)
+    FiveFly.Vehicle.connectedVehicle = vehicle
+    FiveFly.Vehicle.connectedVehicleNetId = NetworkGetNetworkIdFromEntity(vehicle)
 
     return vehicle
 end
 
-function FiveFY.Vehicle.GetCurrent()
+function FiveFly.Vehicle.GetCurrent()
     local ped = PlayerPedId()
     local vehicle = GetVehiclePedIsIn(ped, false)
 
     if isVehicleValid(vehicle) then
-        FiveFY.Vehicle.lastVehicle = vehicle
+        FiveFly.Vehicle.lastVehicle = vehicle
         return vehicle
     end
 
     return nil
 end
 
-function FiveFY.Vehicle.GetLast()
-    if isVehicleValid(FiveFY.Vehicle.lastVehicle) then
-        return FiveFY.Vehicle.lastVehicle
+function FiveFly.Vehicle.GetLast()
+    if isVehicleValid(FiveFly.Vehicle.lastVehicle) then
+        return FiveFly.Vehicle.lastVehicle
     end
 
     return nil
 end
 
-function FiveFY.Vehicle.ConnectCurrent()
-    local vehicle = FiveFY.Vehicle.GetCurrent() or FiveFY.Vehicle.GetLast()
+function FiveFly.Vehicle.ConnectCurrent()
+    local vehicle = FiveFly.Vehicle.GetCurrent() or FiveFly.Vehicle.GetLast()
 
     if not isVehicleValid(vehicle) then
         return false
     end
 
     connectAudioVehicle(vehicle)
-    FiveFY.Vehicle.lastVehicle = vehicle
+    FiveFly.Vehicle.lastVehicle = vehicle
 
     return true
 end
 
-function FiveFY.Vehicle.ClearConnected()
-    FiveFY.Vehicle.connectedVehicle = nil
-    FiveFY.Vehicle.connectedVehicleNetId = nil
+function FiveFly.Vehicle.ClearConnected()
+    FiveFly.Vehicle.connectedVehicle = nil
+    FiveFly.Vehicle.connectedVehicleNetId = nil
 end
 
-function FiveFY.Vehicle.GetConnected()
-    if isVehicleValid(FiveFY.Vehicle.connectedVehicle) then
-        return connectAudioVehicle(FiveFY.Vehicle.connectedVehicle)
+function FiveFly.Vehicle.GetConnected()
+    if isVehicleValid(FiveFly.Vehicle.connectedVehicle) then
+        return connectAudioVehicle(FiveFly.Vehicle.connectedVehicle)
     end
 
-    local netId = tonumber(FiveFY.Vehicle.connectedVehicleNetId or 0)
+    local netId = tonumber(FiveFly.Vehicle.connectedVehicleNetId or 0)
 
     if netId > 0 then
         local vehicle = NetworkGetEntityFromNetworkId(netId)
@@ -183,12 +183,12 @@ function FiveFY.Vehicle.GetConnected()
         end
     end
 
-    FiveFY.Vehicle.ClearConnected()
+    FiveFly.Vehicle.ClearConnected()
     return nil
 end
 
-function FiveFY.Vehicle.GetOwnerDistance()
-    local vehicle = FiveFY.Vehicle.GetConnected()
+function FiveFly.Vehicle.GetOwnerDistance()
+    local vehicle = FiveFly.Vehicle.GetConnected()
 
     if not vehicle then
         return nil
@@ -197,16 +197,16 @@ function FiveFY.Vehicle.GetOwnerDistance()
     return #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(vehicle))
 end
 
-function FiveFY.Vehicle.IsOwnerTooFar()
+function FiveFly.Vehicle.IsOwnerTooFar()
     local vehicleConfig = Config.Range and Config.Range.vehicle or {}
     local maxDistance = tonumber(vehicleConfig.ownerMaxDistance) or 80.0
-    local distance = FiveFY.Vehicle.GetOwnerDistance()
+    local distance = FiveFly.Vehicle.GetOwnerDistance()
 
     return distance ~= nil and distance > maxDistance
 end
 
-function FiveFY.Vehicle.GetOutputTarget()
-    local vehicle = FiveFY.Vehicle.GetConnected()
+function FiveFly.Vehicle.GetOutputTarget()
+    local vehicle = FiveFly.Vehicle.GetConnected()
 
     if not vehicle then
         return nil

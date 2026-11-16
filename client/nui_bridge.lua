@@ -1,8 +1,8 @@
 --- NUI callbacks shared by the phone app and the panel. Most actions are forwarded to the server as-is;
 --- playback actions also drive the local audio engine with the session returned by the server.
-FiveFY.Nui = {}
+FiveFly.Nui = {}
 
-local Nui = FiveFY.Nui
+local Nui = FiveFly.Nui
 local pendingRequests = {}
 local requestCounter = 0
 local REQUEST_TIMEOUT_MS <const> = 10000
@@ -22,7 +22,7 @@ function Nui.RequestServer(action, payload, cb)
     local requestId = ("%d:%d"):format(GetGameTimer(), requestCounter)
     pendingRequests[requestId] = cb
 
-    TriggerServerEvent("fivefy:server:request", requestId, action, payload or {})
+    TriggerServerEvent("fivefly:server:request", requestId, action, payload or {})
 
     SetTimeout(REQUEST_TIMEOUT_MS, function()
         local pending = pendingRequests[requestId]
@@ -34,7 +34,7 @@ function Nui.RequestServer(action, payload, cb)
     end)
 end
 
-RegisterNetEvent("fivefy:client:response", function(requestId, response)
+RegisterNetEvent("fivefly:client:response", function(requestId, response)
     local key = tostring(requestId or "")
     local cb = pendingRequests[key]
 
@@ -56,9 +56,9 @@ end
 
 local function getAudioState()
     return {
-        output = FiveFY.Bluetooth.GetOutput(),
-        volume = FiveFY.Volume.value,
-        muted = FiveFY.Volume.muted
+        output = FiveFly.Bluetooth.GetOutput(),
+        volume = FiveFly.Volume.value,
+        muted = FiveFly.Volume.muted
     }
 end
 
@@ -111,7 +111,7 @@ for _, action in ipairs(FORWARDED_ACTIONS) do
 
         Nui.RequestServer(action, payload, function(response)
             if response.ok and LIBRARY_MUTATIONS[action] then
-                FiveFY.SendUiMessage("library.changed", { origin = origin, action = action })
+                FiveFly.SendUiMessage("library.changed", { origin = origin, action = action })
             end
 
             cb(response)
@@ -124,7 +124,7 @@ RegisterNUICallback("app.ready", function(_, cb)
         identifier = Config.Phone.Identifier,
         name = Config.Phone.Name,
         locale = Config.Locale,
-        phoneAvailable = FiveFY.IsPhoneAvailable(),
+        phoneAvailable = FiveFly.IsPhoneAvailable(),
         panelEnabled = Config.Panel.Enabled == true
     }))
 end)
@@ -148,26 +148,26 @@ local function applySession(session, origin)
     end
 
     if session.currentTrack then
-        FiveFY.AudioEngine.PlaySession(session)
+        FiveFly.AudioEngine.PlaySession(session)
 
         if origin then
-            FiveFY.PlaybackOrigin = origin
+            FiveFly.PlaybackOrigin = origin
         end
     else
-        FiveFY.AudioEngine.Transport("stop")
-        FiveFY.PlaybackOrigin = nil
+        FiveFly.AudioEngine.Transport("stop")
+        FiveFly.PlaybackOrigin = nil
     end
 
-    FiveFY.SendUiMessage("playback.state", session)
+    FiveFly.SendUiMessage("playback.state", session)
 end
 
 --- Keeps the engine's session in sync without restarting the current track.
 local function updateSession(session)
     if type(session) == "table" and session.currentTrack then
-        FiveFY.AudioEngine.UpdateSession(session)
+        FiveFly.AudioEngine.UpdateSession(session)
     end
 
-    FiveFY.SendUiMessage("playback.state", session)
+    FiveFly.SendUiMessage("playback.state", session)
 end
 
 for _, action in ipairs({ "playback.play", "playback.sessions.join" }) do
@@ -195,7 +195,7 @@ RegisterNUICallback("playback.transport", function(data, cb)
             if action == "next" or action == "prev" or action == "stop" then
                 applySession(session, nil)
             else
-                FiveFY.AudioEngine.Transport(action)
+                FiveFly.AudioEngine.Transport(action)
                 updateSession(session)
             end
         end
@@ -221,7 +221,7 @@ RegisterNUICallback("playback.seek", function(data, cb)
 
     Nui.RequestServer("playback.seek", payload, function(response)
         if response.ok and response.data then
-            FiveFY.AudioEngine.Seek(payload.position)
+            FiveFly.AudioEngine.Seek(payload.position)
             updateSession(response.data.session)
         end
 
@@ -234,12 +234,12 @@ end)
 ---------------------------------------------------------------------------------------------------
 
 RegisterNUICallback("audio.output.get", function(_, cb)
-    cb(Nui.Ok({ output = FiveFY.Bluetooth.GetOutput() }))
+    cb(Nui.Ok({ output = FiveFly.Bluetooth.GetOutput() }))
 end)
 
 RegisterNUICallback("audio.output.set", function(data, cb)
     local output = type(data) == "table" and tostring(data.output or "") or ""
-    local success, errorCode = FiveFY.Bluetooth.SetOutput(output)
+    local success, errorCode = FiveFly.Bluetooth.SetOutput(output)
 
     if not success then
         cb(Nui.Fail(errorCode))
@@ -250,21 +250,21 @@ RegisterNUICallback("audio.output.set", function(data, cb)
 end)
 
 local function applyVolume()
-    FiveFY.AudioEngine.SetVolume(FiveFY.Volume.value, FiveFY.Volume.muted)
-    FiveFY.Sync.UpdateCurrentSource(true)
-    FiveFY.SendUiMessage("audio.state", getAudioState())
+    FiveFly.AudioEngine.SetVolume(FiveFly.Volume.value, FiveFly.Volume.muted)
+    FiveFly.Sync.UpdateCurrentSource(true)
+    FiveFly.SendUiMessage("audio.state", getAudioState())
 end
 
 RegisterNUICallback("audio.volume.set", function(data, cb)
-    FiveFY.Volume.value = FiveFY.Utils.ClampVolume(type(data) == "table" and data.value or 100)
+    FiveFly.Volume.value = FiveFly.Utils.ClampVolume(type(data) == "table" and data.value or 100)
     applyVolume()
-    cb(Nui.Ok({ value = FiveFY.Volume.value }))
+    cb(Nui.Ok({ value = FiveFly.Volume.value }))
 end)
 
 RegisterNUICallback("audio.mute.set", function(data, cb)
-    FiveFY.Volume.muted = type(data) == "table" and data.muted == true
+    FiveFly.Volume.muted = type(data) == "table" and data.muted == true
     applyVolume()
-    cb(Nui.Ok({ muted = FiveFY.Volume.muted }))
+    cb(Nui.Ok({ muted = FiveFly.Volume.muted }))
 end)
 
 --- Auto-advance when the engine reports the end of a track.

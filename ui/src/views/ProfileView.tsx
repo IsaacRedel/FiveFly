@@ -1,11 +1,11 @@
 import { Artwork } from "../components/common";
 import { Icon } from "../components/Icon";
 import { useT } from "../i18n";
-import { useFiveFY } from "../state/store";
+import { useFiveFly } from "../state/store";
 
 export function ProfileView() {
     const t = useT();
-    const { activeProfile: profile, data, currentTrack, isPlaying, actions } = useFiveFY();
+    const { activeProfile: profile, data, currentTrack, isPlaying, actions } = useFiveFly();
     const isOwn = profile.userId === data.profile.userId;
     const session = data.library.friendsListening.find((item) => item.userId === profile.userId) || null;
     const liveTrack = isOwn ? currentTrack : session?.currentTrack || null;

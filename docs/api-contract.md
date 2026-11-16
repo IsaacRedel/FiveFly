@@ -8,9 +8,9 @@ How the UIs (phone app and panel), the client and the server talk to each other.
 UI (React)                client (Lua)                     server (Lua)
 fetchNui(action, payload) ─▶ RegisterNUICallback(action)
                              ├─ local actions (audio.*, app.ready, panel.close)
-                             └─ TriggerServerEvent("fivefy:server:request", id, action, payload)
+                             └─ TriggerServerEvent("fivefly:server:request", id, action, payload)
                                                               ─▶ Actions.Dispatch
-                             ◀─ TriggerClientEvent("fivefy:client:response", id, envelope)
+                             ◀─ TriggerClientEvent("fivefly:client:response", id, envelope)
 ◀─ cb(envelope)
 ```
 
@@ -60,7 +60,7 @@ type Session = {
 type Playlist = { id: number; name: string; trackCount: number; cover: string; shareCode: string; visibility: "public" | "private"; ownerUserId?: number; ownerName?: string };
 
 type Profile = {
-  userId: number; // internal FiveFY id, never a framework identifier
+  userId: number; // internal FiveFly id, never a framework identifier
   name: string; bio: string; avatar: string;
   isPublic: boolean; showActivity: boolean; following: boolean;
   followerCount: number; followingCount: number;
@@ -71,7 +71,7 @@ type SharedSession = { source: number; userId?: number; host: string; output: st
 type Section = { id: string; title: string; description?: string; tracks: Track[] }; // the UI translates by id
 ```
 
-Tracks sent by the client are validated with `FiveFY.Utils.NormalizeTrack`: invalid ids, non-http URLs and oversized fields are rejected or trimmed. Tracks that will be played (queues, spatial audio) also go through `NormalizeClientTrack`, which keeps a `streamUrl` only when it belongs to a station in `Config.Stations`.
+Tracks sent by the client are validated with `FiveFly.Utils.NormalizeTrack`: invalid ids, non-http URLs and oversized fields are rejected or trimmed. Tracks that will be played (queues, spatial audio) also go through `NormalizeClientTrack`, which keeps a `streamUrl` only when it belongs to a station in `Config.Stations`.
 
 ## Client-only actions
 
@@ -93,7 +93,9 @@ Closes the panel and releases NUI focus.
 
 ## Server actions
 
-Rate limits come from `Config.RateLimits` (read/write/playback) and `Config.Search.CooldownMs`.
+Rate limits come from `Config.RateLimits` (writes, playback, recommendations) and `Config.Search.CooldownMs`. `app.get-initial-state` uses a fixed 300 ms; other reads are not limited.
+
+> Português: [docs/pt-BR/api-contract.md](pt-BR/api-contract.md)
 
 ### app.get-initial-state
 
@@ -221,7 +223,7 @@ Returns the current `Session`.
 
 ## Messages pushed to the UIs
 
-Sent by `FiveFY.SendUiMessage(action, data)` to the lb-phone app (`SendCustomAppMessage`) and to the panel page (`SendNUIMessage` with `target = "ui"`).
+Sent by `FiveFly.SendUiMessage(action, data)` to the lb-phone app (`SendCustomAppMessage`) and to the panel page (`SendNUIMessage` with `target = "ui"`).
 
 | Action | Data |
 | --- | --- |
@@ -237,11 +239,11 @@ The panel also receives `{ target: "panel", action: "open" | "close" }`; the aud
 
 | Event | Direction | Payload |
 | --- | --- | --- |
-| `fivefy:server:updateSource` | client → server | `{ track, status, playback, sourceType: "prop" \| "vehicle", sourceCoords, propNetId?, vehicleNetId?, range, volume, profile, vehicleClass, soundSystem }` |
-| `fivefy:server:stopSource` | client → server | none |
-| `fivefy:client:sourceAdded` | server → client | `sourceId, payload` |
-| `fivefy:client:sourceUpdated` | server → client | `sourceId, payload` |
-| `fivefy:client:sourceRemoved` | server → client | `sourceId` |
-| `fivefy:client:forceStopPlayback` | server → client | `reason` |
+| `fivefly:server:updateSource` | client → server | `{ track, status, playback, sourceType: "prop" \| "vehicle", sourceCoords, propNetId?, vehicleNetId?, range, volume, profile, vehicleClass, soundSystem }` |
+| `fivefly:server:stopSource` | client → server | none |
+| `fivefly:client:sourceAdded` | server → client | `sourceId, payload` |
+| `fivefly:client:sourceUpdated` | server → client | `sourceId, payload` |
+| `fivefly:client:sourceRemoved` | server → client | `sourceId` |
+| `fivefly:client:forceStopPlayback` | server → client | `reason` |
 
 The server caps `range` to the largest range in `Config.Range`, clamps `volume` to 0-100, uses the networked entity position when it exists and only accepts reported coordinates within `Config.Sync.MaxSourceDistance` of the player.

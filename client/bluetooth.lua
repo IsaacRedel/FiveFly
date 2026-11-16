@@ -1,21 +1,21 @@
 
-FiveFY.Bluetooth = {
+FiveFly.Bluetooth = {
     output = Config.Outputs.Default,
     lastAutoOffAt = 0
 }
 
-function FiveFY.Bluetooth.GetOutput()
-    return FiveFY.Bluetooth.output
+function FiveFly.Bluetooth.GetOutput()
+    return FiveFly.Bluetooth.output
 end
 
 local function notifyAudioState(reason)
-    FiveFY.SendUiMessage("audio.state", {
-        output = FiveFY.Bluetooth.GetOutput(),
+    FiveFly.SendUiMessage("audio.state", {
+        output = FiveFly.Bluetooth.GetOutput(),
         reason = reason
     })
 end
 
-function FiveFY.Bluetooth.SetOutput(output)
+function FiveFly.Bluetooth.SetOutput(output)
     local safeOutput = tostring(output or Config.Outputs.Default)
 
     if not Config.Outputs.Allowed[safeOutput] then
@@ -23,27 +23,27 @@ function FiveFY.Bluetooth.SetOutput(output)
     end
 
     if safeOutput == "vehicle" then
-        if not FiveFY.Vehicle or not FiveFY.Vehicle.ConnectCurrent or not FiveFY.Vehicle.ConnectCurrent() then
+        if not FiveFly.Vehicle or not FiveFly.Vehicle.ConnectCurrent or not FiveFly.Vehicle.ConnectCurrent() then
             return false, "vehicle_missing"
         end
-    elseif FiveFY.Vehicle and FiveFY.Vehicle.ClearConnected then
-        FiveFY.Vehicle.ClearConnected()
+    elseif FiveFly.Vehicle and FiveFly.Vehicle.ClearConnected then
+        FiveFly.Vehicle.ClearConnected()
     end
 
-    FiveFY.Bluetooth.output = safeOutput
+    FiveFly.Bluetooth.output = safeOutput
 
-    if FiveFY.AudioEngine and FiveFY.AudioEngine.SetOutput then
-        FiveFY.AudioEngine.SetOutput(safeOutput)
+    if FiveFly.AudioEngine and FiveFly.AudioEngine.SetOutput then
+        FiveFly.AudioEngine.SetOutput(safeOutput)
     end
 
     if safeOutput == "prop" then
-        FiveFY.Prop.Ensure()
-    elseif safeOutput ~= "prop" and FiveFY.Prop then
-        FiveFY.Prop.Delete()
+        FiveFly.Prop.Ensure()
+    elseif safeOutput ~= "prop" and FiveFly.Prop then
+        FiveFly.Prop.Delete()
     end
 
-    if FiveFY.Sync then
-        FiveFY.Sync.UpdateCurrentSource(true)
+    if FiveFly.Sync then
+        FiveFly.Sync.UpdateCurrentSource(true)
     end
 
     notifyAudioState(nil)
@@ -51,35 +51,35 @@ function FiveFY.Bluetooth.SetOutput(output)
     return true, nil
 end
 
-function FiveFY.Bluetooth.AutoOffOutput(reason)
-    local output = FiveFY.Bluetooth.GetOutput()
+function FiveFly.Bluetooth.AutoOffOutput(reason)
+    local output = FiveFly.Bluetooth.GetOutput()
 
     if output == "off" or output == "private" then
         return false
     end
 
-    FiveFY.Bluetooth.lastAutoOffAt = GetGameTimer()
-    FiveFY.Bluetooth.SetOutput("off")
+    FiveFly.Bluetooth.lastAutoOffAt = GetGameTimer()
+    FiveFly.Bluetooth.SetOutput("off")
     notifyAudioState(reason or "auto_off")
 
     return true
 end
 
-function FiveFY.Bluetooth.ValidateOutputTarget()
-    local output = FiveFY.Bluetooth.GetOutput()
+function FiveFly.Bluetooth.ValidateOutputTarget()
+    local output = FiveFly.Bluetooth.GetOutput()
 
     if output == "off" or output == "private" then
         return true
     end
 
     if IsEntityDead(PlayerPedId()) then
-        FiveFY.Bluetooth.AutoOffOutput("player_dead")
+        FiveFly.Bluetooth.AutoOffOutput("player_dead")
         return false
     end
 
     if output == "prop" then
-        if not FiveFY.Prop or not FiveFY.Prop.Exists() then
-            FiveFY.Bluetooth.AutoOffOutput("prop_missing")
+        if not FiveFly.Prop or not FiveFly.Prop.Exists() then
+            FiveFly.Bluetooth.AutoOffOutput("prop_missing")
             return false
         end
 
@@ -87,23 +87,23 @@ function FiveFY.Bluetooth.ValidateOutputTarget()
     end
 
     if output == "vehicle" then
-        local target = FiveFY.Vehicle and FiveFY.Vehicle.GetOutputTarget and FiveFY.Vehicle.GetOutputTarget() or nil
+        local target = FiveFly.Vehicle and FiveFly.Vehicle.GetOutputTarget and FiveFly.Vehicle.GetOutputTarget() or nil
 
         if not target or not target.sourceCoords then
-            if FiveFY.StopPlayback then
-                FiveFY.StopPlayback("vehicle_missing")
+            if FiveFly.StopPlayback then
+                FiveFly.StopPlayback("vehicle_missing")
             end
 
-            FiveFY.Bluetooth.AutoOffOutput("vehicle_missing")
+            FiveFly.Bluetooth.AutoOffOutput("vehicle_missing")
             return false
         end
 
-        if FiveFY.Vehicle.IsOwnerTooFar and FiveFY.Vehicle.IsOwnerTooFar() then
-            if FiveFY.StopPlayback then
-                FiveFY.StopPlayback("vehicle_owner_too_far")
+        if FiveFly.Vehicle.IsOwnerTooFar and FiveFly.Vehicle.IsOwnerTooFar() then
+            if FiveFly.StopPlayback then
+                FiveFly.StopPlayback("vehicle_owner_too_far")
             end
 
-            FiveFY.Bluetooth.AutoOffOutput("vehicle_owner_too_far")
+            FiveFly.Bluetooth.AutoOffOutput("vehicle_owner_too_far")
             return false
         end
 
@@ -113,8 +113,8 @@ function FiveFY.Bluetooth.ValidateOutputTarget()
     return true
 end
 
-function FiveFY.Bluetooth.GetOutputTarget()
-    local output = FiveFY.Bluetooth.GetOutput()
+function FiveFly.Bluetooth.GetOutputTarget()
+    local output = FiveFly.Bluetooth.GetOutput()
 
     if output == "off" or output == "private" then
         return {
@@ -123,7 +123,7 @@ function FiveFY.Bluetooth.GetOutputTarget()
     end
 
     if output == "prop" then
-        local entity, propNetId = FiveFY.Prop.Ensure()
+        local entity, propNetId = FiveFly.Prop.Ensure()
         local propConfig = Config.Range and Config.Range.prop or {}
 
         if not entity then
@@ -132,7 +132,7 @@ function FiveFY.Bluetooth.GetOutputTarget()
 
         return {
             sourceType = "prop",
-            sourceCoords = FiveFY.Prop.GetCoords(),
+            sourceCoords = FiveFly.Prop.GetCoords(),
             propNetId = propNetId,
             range = tonumber(propConfig.range) or 16.0,
             volume = tonumber(propConfig.volume) or 78.0
@@ -140,7 +140,7 @@ function FiveFY.Bluetooth.GetOutputTarget()
     end
 
     if output == "vehicle" then
-        return FiveFY.Vehicle.GetOutputTarget()
+        return FiveFly.Vehicle.GetOutputTarget()
     end
 
     return nil
@@ -148,10 +148,10 @@ end
 
 CreateThread(function()
     while true do
-        local output = FiveFY.Bluetooth.GetOutput()
+        local output = FiveFly.Bluetooth.GetOutput()
 
         if output == "prop" or output == "vehicle" then
-            FiveFY.Bluetooth.ValidateOutputTarget()
+            FiveFly.Bluetooth.ValidateOutputTarget()
             Wait(1000)
         else
             Wait(1500)

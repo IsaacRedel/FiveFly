@@ -2,11 +2,11 @@ import { EmptyState, PlaylistCover, TrackList } from "../components/common";
 import { Icon } from "../components/Icon";
 import { useT } from "../i18n";
 import { durationToSeconds, formatTime } from "../lib/time";
-import { useFiveFY } from "../state/store";
+import { useFiveFly } from "../state/store";
 
 export function PlaylistView() {
     const t = useT();
-    const { selectedPlaylist: playlist, selectedPlaylistTracks: tracks, data, actions } = useFiveFY();
+    const { selectedPlaylist: playlist, selectedPlaylistTracks: tracks, data, actions } = useFiveFly();
 
     if (!playlist) {
         return <EmptyState icon="library" title={t("playlist.notFound")} description={t("playlist.notFoundHint")} actionLabel={t("common.back")} onAction={() => actions.openView("library")} />;

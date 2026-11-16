@@ -1,4 +1,4 @@
---- Registers FiveFY as a custom lb-phone app (only when Config.Phone.Enabled and lb-phone is running).
+--- Registers FiveFly as a custom lb-phone app (only when Config.Phone.Enabled and lb-phone is running).
 local RESOURCE_NAME <const> = GetCurrentResourceName()
 local REGISTER_DELAY_MS <const> = 1000
 
@@ -7,7 +7,7 @@ local function getPhoneResource()
 end
 
 local function registerApp()
-    if not FiveFY.IsPhoneAvailable() then
+    if not FiveFly.IsPhoneAvailable() then
         return
     end
 
@@ -15,7 +15,7 @@ local function registerApp()
     local app = {
         identifier = Config.Phone.Identifier,
         name = Config.Phone.Name,
-        description = Config.Phone.Description,
+        description = Config.Phone.Description or FiveFly.T("app.description"),
         developer = Config.Phone.Developer,
         resourceName = RESOURCE_NAME,
         defaultApp = Config.Phone.DefaultApp,
@@ -34,7 +34,7 @@ local function registerApp()
     end)
 
     if not ok or not added then
-        FiveFY.Log("error", "failed to register the phone app: %s", tostring(errorMessage or added))
+        FiveFly.Log("error", FiveFly.T("log.phone_register_failed", tostring(errorMessage or added)))
     end
 end
 
@@ -63,7 +63,7 @@ AddEventHandler("onClientResourceStart", function(resourceName)
 end)
 
 AddEventHandler("onClientResourceStop", function(resourceName)
-    if resourceName ~= RESOURCE_NAME or not FiveFY.IsPhoneAvailable() then
+    if resourceName ~= RESOURCE_NAME or not FiveFly.IsPhoneAvailable() then
         return
     end
 

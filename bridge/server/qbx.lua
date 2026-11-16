@@ -2,7 +2,7 @@ local function getPlayer(source)
     return exports.qbx_core:GetPlayer(source)
 end
 
-FiveFY.Bridge.Register({
+FiveFly.Bridge.Register({
     name = "qbx",
     resource = "qbx_core",
 

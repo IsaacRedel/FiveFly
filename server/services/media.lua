@@ -1,7 +1,7 @@
 --- Validates image URLs against whitelists and re-uploads images from temporary hosts to Fivemanage.
-FiveFY.Media = {}
+FiveFly.Media = {}
 
-local trim = FiveFY.Utils.Trim
+local trim = FiveFly.Utils.Trim
 
 local BASE64_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 local CONTENT_TYPE_EXTENSIONS = {
@@ -20,7 +20,7 @@ end
 
 --- Lowercase hostname of an http(s) URL, or nil when the authority contains anything other than a plain host
 --- (credentials, backslashes or unusual characters could make the host checked differ from the one requested).
-function FiveFY.Media.GetHostname(url)
+function FiveFly.Media.GetHostname(url)
     local authority = trim(url):lower():match("^https?://([^/%?#]+)")
 
     if not authority then
@@ -36,7 +36,7 @@ function FiveFY.Media.GetHostname(url)
     return host
 end
 
-local getHostname = FiveFY.Media.GetHostname
+local getHostname = FiveFly.Media.GetHostname
 
 local function escapePattern(value)
     return (value:gsub("[%^%$%(%)%%%.%[%]%*%+%-%?]", "%%%0"))
@@ -128,7 +128,7 @@ local function buildRules()
     return allowedPatterns, blockedPatterns
 end
 
-function FiveFY.Media.IsAllowed(url)
+function FiveFly.Media.IsAllowed(url)
     local hostname = getHostname(url)
 
     if not hostname or not hostname:find("%.") then
@@ -200,7 +200,7 @@ for index = 1, #BASE64_CHARS do
     BASE64_LOOKUP[index - 1] = BASE64_CHARS:sub(index, index)
 end
 
-function FiveFY.Media.Base64Encode(data)
+function FiveFly.Media.Base64Encode(data)
     local output = {}
     local length = #data
 
@@ -217,7 +217,7 @@ function FiveFY.Media.Base64Encode(data)
     return table.concat(output)
 end
 
-local base64Encode = FiveFY.Media.Base64Encode
+local base64Encode = FiveFly.Media.Base64Encode
 
 local function extensionFromContentType(contentType)
     return CONTENT_TYPE_EXTENSIONS[tostring(contentType or ""):lower()]
@@ -263,7 +263,7 @@ local function getLbPhoneImageApiKey()
 end
 
 local function getFivemanageApiKey()
-    local apiKey = GetConvar("fivefy_fivemanage_key", "")
+    local apiKey = GetConvar("fivefly_fivemanage_key", "")
 
     if apiKey ~= "" then
         return apiKey
@@ -302,13 +302,13 @@ local function reuploadToFivemanage(sourceUrl)
     end
 
     local extension = extensionFromContentType(contentType) or extensionFromUrl(sourceUrl)
-    local filename = ("fivefy-%d.%s"):format(os.time(), extension)
+    local filename = ("fivefly-%d.%s"):format(os.time(), extension)
     local payload = json.encode({
         base64 = ("data:%s;base64,%s"):format(contentType, base64Encode(download.body)),
         filename = filename,
         retentionExempt = true,
         metadata = json.encode({
-            source = "fivefy-external-reupload",
+            source = "fivefly-external-reupload",
             originalUrl = sourceUrl
         })
     })
@@ -337,14 +337,14 @@ local function reuploadToFivemanage(sourceUrl)
     return uploadedUrl, nil
 end
 
-function FiveFY.Media.ResolveImageUrl(url)
+function FiveFly.Media.ResolveImageUrl(url)
     local safeUrl = trim(url):sub(1, 512)
 
     if safeUrl == "" then
         return "", nil
     end
 
-    if not safeUrl:match("^https?://") or not FiveFY.Media.IsAllowed(safeUrl) then
+    if not safeUrl:match("^https?://") or not FiveFly.Media.IsAllowed(safeUrl) then
         return nil, "media_not_allowed"
     end
 
@@ -359,7 +359,7 @@ function FiveFY.Media.ResolveImageUrl(url)
             return safeUrl, nil
         end
 
-        if not FiveFY.Media.IsAllowed(uploadedUrl) then
+        if not FiveFly.Media.IsAllowed(uploadedUrl) then
             return nil, "media_not_allowed"
         end
 

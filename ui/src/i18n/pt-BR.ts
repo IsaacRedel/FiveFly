@@ -30,7 +30,7 @@ const ptBR: Messages = {
     "home.stations": "Rádios",
     "home.madeForYou": "Feito para você",
     "home.noSuggestions": "Sem sugestões ainda",
-    "home.noSuggestionsHint": "Toque algumas músicas para o FiveFY entender seu gosto.",
+    "home.noSuggestionsHint": "Toque algumas músicas para o FiveFly entender seu gosto.",
     "home.continue": "Continuar ouvindo",
     "home.nothingYet": "Nada por aqui ainda",
     "home.nothingYetHint": "Busque uma música ou crie uma playlist para continuar depois.",
@@ -130,7 +130,7 @@ const ptBR: Messages = {
     "settings.clearHistoryHint": "Remove suas músicas tocadas recentemente.",
 
     "profile.title": "Perfil",
-    "profile.kicker": "Perfil FiveFY",
+    "profile.kicker": "Perfil FiveFly",
     "profile.ownEmptyBio": "Adicione uma bio para mostrar seu clima musical.",
     "profile.emptyBio": "Esse perfil ainda não tem bio.",
     "profile.playlists": "playlists",
@@ -189,7 +189,7 @@ const ptBR: Messages = {
     "playlistCover.title": "Capa por URL",
     "playlistCover.submit": "Salvar capa",
 
-    "panel.close": "Fechar o FiveFY",
+    "panel.close": "Fechar o FiveFly",
     "panel.yourPlaylists": "Suas playlists",
     "panel.following": "Seguindo",
     "panel.newPlaylist": "Nova playlist",
@@ -216,7 +216,7 @@ const ptBR: Messages = {
     "notice.outputChanged": "Saída alterada",
     "notice.historyCleared": "Histórico limpo",
 
-    "error.permission_denied": "Você não tem permissão para usar o FiveFY.",
+    "error.permission_denied": "Você não tem permissão para usar o FiveFly.",
     "error.rate_limited": "Aguarde um instante.",
     "error.search_unavailable": "Busca indisponível no momento.",
     "error.search_parse_failed": "Busca indisponível no momento.",
@@ -240,7 +240,7 @@ const ptBR: Messages = {
     "error.profile_not_found": "Perfil não encontrado.",
     "error.session_not_found": "Essa sessão não está mais tocando.",
     "error.identity_unavailable": "Seu personagem ainda não foi carregado.",
-    "error.database_not_ready": "O FiveFY está iniciando, tente de novo em instantes.",
+    "error.database_not_ready": "O FiveFly está iniciando, tente de novo em instantes.",
     "error.server_timeout": "O servidor demorou para responder.",
     "error.engine_error": "Não foi possível tocar essa música.",
     "error.unknown": "Algo deu errado ({code})."

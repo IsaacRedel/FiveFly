@@ -3,7 +3,7 @@
   "runtime.version": "Lua 5.4",
   "runtime.nonstandardSymbol": ["/**/", "`", "+=", "-=", "*=", "/=", "<<=", ">>=", "&=", "|=", "^="],
   "diagnostics.disable": ["undefined-global", "lowercase-global"],
-  "diagnostics.globals": ["FiveFY", "Config", "MySQL"],
+  "diagnostics.globals": ["FiveFly", "Config", "MySQL"],
   "workspace.ignoreDir": ["ui/node_modules", "ui/dist", ".github"],
   "workspace.checkThirdParty": false
 }

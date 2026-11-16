@@ -1,11 +1,11 @@
 import { Artwork, EmptyState, TrackList } from "../components/common";
 import { Icon } from "../components/Icon";
 import { useT } from "../i18n";
-import { useFiveFY } from "../state/store";
+import { useFiveFly } from "../state/store";
 
 function SocialResults() {
     const t = useT();
-    const { socialResults, actions } = useFiveFY();
+    const { socialResults, actions } = useFiveFly();
 
     if (socialResults.profiles.length === 0 && socialResults.playlists.length === 0) {
         return null;
@@ -50,7 +50,7 @@ function SocialResults() {
 
 export function SearchView() {
     const t = useT();
-    const { query, isSearching, searchResults, socialResults, data, actions } = useFiveFY();
+    const { query, isSearching, searchResults, socialResults, data, actions } = useFiveFly();
     const total = searchResults.length + socialResults.profiles.length + socialResults.playlists.length;
 
     return (

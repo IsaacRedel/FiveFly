@@ -33,7 +33,7 @@ export type Sheet =
 
 const EMPTY_SOCIAL: SocialSearchResults = { profiles: [], playlists: [] };
 
-function useFiveFYStore(origin: UiOrigin) {
+function useFiveFlyStore(origin: UiOrigin) {
     const [data, dispatch] = useReducer(dataReducer, INITIAL_DATA);
     const [locale, setLocale] = useState<Locale>(normalizeLocale(new URLSearchParams(window.location.search).get("lang") || navigator.language));
     const t = useMemo(() => createTranslator(locale), [locale]);
@@ -110,7 +110,7 @@ function useFiveFYStore(origin: UiOrigin) {
         return () => window.clearInterval(timer);
     }, [isPlaying, currentTrack?.videoId]);
 
-    // State pushed by the client (see client/main.lua FiveFY.SendUiMessage).
+    // State pushed by the client (see client/main.lua FiveFly.SendUiMessage).
     useEffect(() => {
         let reloadTimer = 0;
 
@@ -694,12 +694,12 @@ function useFiveFYStore(origin: UiOrigin) {
     };
 }
 
-export type FiveFYStore = ReturnType<typeof useFiveFYStore>;
+export type FiveFlyStore = ReturnType<typeof useFiveFlyStore>;
 
-const StoreContext = createContext<FiveFYStore | null>(null);
+const StoreContext = createContext<FiveFlyStore | null>(null);
 
-export function FiveFYProvider({ origin, children }: { origin: UiOrigin; children: ReactNode }) {
-    const store = useFiveFYStore(origin);
+export function FiveFlyProvider({ origin, children }: { origin: UiOrigin; children: ReactNode }) {
+    const store = useFiveFlyStore(origin);
 
     return (
         <StoreContext.Provider value={store}>
@@ -708,11 +708,11 @@ export function FiveFYProvider({ origin, children }: { origin: UiOrigin; childre
     );
 }
 
-export function useFiveFY() {
+export function useFiveFly() {
     const store = useContext(StoreContext);
 
     if (!store) {
-        throw new Error("useFiveFY must be used inside FiveFYProvider");
+        throw new Error("useFiveFly must be used inside FiveFlyProvider");
     }
 
     return store;

@@ -1,5 +1,5 @@
 
-FiveFY.Sync = {
+FiveFly.Sync = {
     activeSession = nil,
     lastUpdateAt = 0,
     lastCoords = nil,
@@ -8,8 +8,8 @@ FiveFY.Sync = {
     externalSources = {}
 }
 
-function FiveFY.Sync.IsActive()
-    return FiveFY.Sync.active == true
+function FiveFly.Sync.IsActive()
+    return FiveFly.Sync.active == true
 end
 
 local function distanceBetween(a, b)
@@ -62,19 +62,19 @@ local function toVector3(coords)
 end
 
 local function buildSourcePayload(force)
-    local session = FiveFY.Sync.activeSession
+    local session = FiveFly.Sync.activeSession
 
     if type(session) ~= "table" or type(session.currentTrack) ~= "table" then
         return nil
     end
 
-    if FiveFY.Bluetooth.ValidateOutputTarget and not FiveFY.Bluetooth.ValidateOutputTarget() then
+    if FiveFly.Bluetooth.ValidateOutputTarget and not FiveFly.Bluetooth.ValidateOutputTarget() then
         return {
             stop = true
         }
     end
 
-    local target = FiveFY.Bluetooth.GetOutputTarget()
+    local target = FiveFly.Bluetooth.GetOutputTarget()
 
     if not target or target.sourceType == "private" or target.sourceType == "off" then
         return {
@@ -87,26 +87,26 @@ local function buildSourcePayload(force)
     end
 
     local now = GetGameTimer()
-    local moved = distanceBetween(target.sourceCoords, FiveFY.Sync.lastCoords) >= Config.Sync.PositionThreshold
+    local moved = distanceBetween(target.sourceCoords, FiveFly.Sync.lastCoords) >= Config.Sync.PositionThreshold
 
-    if not force and not moved and now - FiveFY.Sync.lastUpdateAt < Config.Sync.PositionIntervalMs then
+    if not force and not moved and now - FiveFly.Sync.lastUpdateAt < Config.Sync.PositionIntervalMs then
         return nil
     end
 
-    FiveFY.Sync.lastUpdateAt = now
-    FiveFY.Sync.lastCoords = target.sourceCoords
+    FiveFly.Sync.lastUpdateAt = now
+    FiveFly.Sync.lastCoords = target.sourceCoords
 
-    local sourceVolume = FiveFY.Volume and FiveFY.Volume.value or 100
+    local sourceVolume = FiveFly.Volume and FiveFly.Volume.value or 100
 
-    if FiveFY.Volume and FiveFY.Volume.muted then
+    if FiveFly.Volume and FiveFly.Volume.muted then
         sourceVolume = 0
-    elseif FiveFY.AudioEngine and FiveFY.AudioEngine.GetEffectiveVolume then
-        sourceVolume = FiveFY.AudioEngine.GetEffectiveVolume(sourceVolume)
+    elseif FiveFly.AudioEngine and FiveFly.AudioEngine.GetEffectiveVolume then
+        sourceVolume = FiveFly.AudioEngine.GetEffectiveVolume(sourceVolume)
     end
 
     sourceVolume = applyOutputProfileVolume(sourceVolume, target.volume)
 
-    local progress = FiveFY.AudioEngine and FiveFY.AudioEngine.progress or {}
+    local progress = FiveFly.AudioEngine and FiveFly.AudioEngine.progress or {}
     local playback = session.playback or {}
     local progressVideoId = tostring(progress.videoId or "")
     local trackVideoId = tostring(session.currentTrack.videoId or "")
@@ -136,19 +136,19 @@ local function buildSourcePayload(force)
     }
 end
 
-function FiveFY.Sync.SetCurrentSession(session)
-    FiveFY.Sync.activeSession = session
-    FiveFY.Sync.active = type(session) == "table" and type(session.currentTrack) == "table"
-    FiveFY.Sync.UpdateCurrentSource(true)
+function FiveFly.Sync.SetCurrentSession(session)
+    FiveFly.Sync.activeSession = session
+    FiveFly.Sync.active = type(session) == "table" and type(session.currentTrack) == "table"
+    FiveFly.Sync.UpdateCurrentSource(true)
 end
 
-function FiveFY.Sync.ClearCurrentSession()
-    FiveFY.Sync.activeSession = nil
-    FiveFY.Sync.active = false
-    TriggerServerEvent("fivefy:server:stopSource")
+function FiveFly.Sync.ClearCurrentSession()
+    FiveFly.Sync.activeSession = nil
+    FiveFly.Sync.active = false
+    TriggerServerEvent("fivefly:server:stopSource")
 end
 
-function FiveFY.Sync.UpdateCurrentSource(force)
+function FiveFly.Sync.UpdateCurrentSource(force)
     local payload = buildSourcePayload(force == true)
 
     if not payload then
@@ -156,14 +156,14 @@ function FiveFY.Sync.UpdateCurrentSource(force)
     end
 
     if payload.stop then
-        TriggerServerEvent("fivefy:server:stopSource")
+        TriggerServerEvent("fivefly:server:stopSource")
         return
     end
 
-    TriggerServerEvent("fivefy:server:updateSource", payload)
+    TriggerServerEvent("fivefly:server:updateSource", payload)
 end
 
-function FiveFY.Sync.CalculateExternalVolume(sourceInfo)
+function FiveFly.Sync.CalculateExternalVolume(sourceInfo)
     if type(sourceInfo) ~= "table" then
         return 0
     end
@@ -177,19 +177,19 @@ function FiveFY.Sync.CalculateExternalVolume(sourceInfo)
     local attenuation = Config.Attenuation or {}
     local distance = spatialDistance(GetEntityCoords(PlayerPedId()), sourceCoords, attenuation)
 
-    return FiveFY.Utils.AttenuatedVolume(distance, sourceInfo.range, sourceInfo.volume, attenuation)
+    return FiveFly.Utils.AttenuatedVolume(distance, sourceInfo.range, sourceInfo.volume, attenuation)
 end
 
-function FiveFY.Sync.UpdateExternalVolumes()
-    if not FiveFY.AudioEngine then
+function FiveFly.Sync.UpdateExternalVolumes()
+    if not FiveFly.AudioEngine then
         return
     end
 
     local attenuation = Config.Attenuation or {}
     local smoothing = clamp(attenuation.smoothingFactor or 0.15, 0.0, 1.0)
 
-    for sourceId, sourceInfo in pairs(FiveFY.Sync.externalSources) do
-        local targetVolume = FiveFY.Sync.CalculateExternalVolume(sourceInfo)
+    for sourceId, sourceInfo in pairs(FiveFly.Sync.externalSources) do
+        local targetVolume = FiveFly.Sync.CalculateExternalVolume(sourceInfo)
         local currentVolume = tonumber(sourceInfo.currentVolume)
 
         if not currentVolume then
@@ -204,45 +204,45 @@ function FiveFY.Sync.UpdateExternalVolumes()
 
         sourceInfo.currentVolume = currentVolume
 
-        FiveFY.AudioEngine.SetExternalVolume(sourceId, currentVolume)
+        FiveFly.AudioEngine.SetExternalVolume(sourceId, currentVolume)
     end
 end
 
-RegisterNetEvent("fivefy:client:sourceAdded", function(sourceId, payload)
-    if not FiveFY.AudioEngine or type(payload) ~= "table" then
+RegisterNetEvent("fivefly:client:sourceAdded", function(sourceId, payload)
+    if not FiveFly.AudioEngine or type(payload) ~= "table" then
         return
     end
 
-    FiveFY.Sync.externalSources[sourceId] = payload
-    FiveFY.AudioEngine.AddExternalSource(sourceId, payload)
-    FiveFY.Sync.UpdateExternalVolumes()
+    FiveFly.Sync.externalSources[sourceId] = payload
+    FiveFly.AudioEngine.AddExternalSource(sourceId, payload)
+    FiveFly.Sync.UpdateExternalVolumes()
 end)
 
-RegisterNetEvent("fivefy:client:sourceUpdated", function(sourceId, payload)
-    if not FiveFY.AudioEngine or type(payload) ~= "table" then
+RegisterNetEvent("fivefly:client:sourceUpdated", function(sourceId, payload)
+    if not FiveFly.AudioEngine or type(payload) ~= "table" then
         return
     end
 
-    local previous = FiveFY.Sync.externalSources[sourceId] or {}
+    local previous = FiveFly.Sync.externalSources[sourceId] or {}
     payload.currentVolume = previous.currentVolume
-    FiveFY.Sync.externalSources[sourceId] = payload
-    FiveFY.AudioEngine.UpdateExternalSource(sourceId, payload)
-    FiveFY.Sync.UpdateExternalVolumes()
+    FiveFly.Sync.externalSources[sourceId] = payload
+    FiveFly.AudioEngine.UpdateExternalSource(sourceId, payload)
+    FiveFly.Sync.UpdateExternalVolumes()
 end)
 
-RegisterNetEvent("fivefy:client:sourceRemoved", function(sourceId)
-    if not FiveFY.AudioEngine then
+RegisterNetEvent("fivefly:client:sourceRemoved", function(sourceId)
+    if not FiveFly.AudioEngine then
         return
     end
 
-    FiveFY.Sync.externalSources[sourceId] = nil
-    FiveFY.AudioEngine.RemoveExternalSource(sourceId)
+    FiveFly.Sync.externalSources[sourceId] = nil
+    FiveFly.AudioEngine.RemoveExternalSource(sourceId)
 end)
 
 CreateThread(function()
     while true do
-        if FiveFY.Sync.IsActive() then
-            FiveFY.Sync.UpdateCurrentSource(false)
+        if FiveFly.Sync.IsActive() then
+            FiveFly.Sync.UpdateCurrentSource(false)
             Wait(Config.Sync.PositionIntervalMs)
         else
             Wait(1000)
@@ -252,10 +252,10 @@ end)
 
 CreateThread(function()
     while true do
-        local hasExternalSources = next(FiveFY.Sync.externalSources) ~= nil
+        local hasExternalSources = next(FiveFly.Sync.externalSources) ~= nil
 
         if hasExternalSources then
-            FiveFY.Sync.UpdateExternalVolumes()
+            FiveFly.Sync.UpdateExternalVolumes()
             Wait(Config.Sync.VolumeIntervalMs)
         else
             Wait(1000)

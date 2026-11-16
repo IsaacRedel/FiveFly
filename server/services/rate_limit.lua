@@ -1,4 +1,4 @@
-FiveFY.RateLimit = {}
+FiveFly.RateLimit = {}
 
 local buckets = {}
 
@@ -7,7 +7,7 @@ local buckets = {}
 ---@param key string
 ---@param cooldownMs integer
 ---@return boolean allowed, integer remainingMs
-function FiveFY.RateLimit.Allow(source, key, cooldownMs)
+function FiveFly.RateLimit.Allow(source, key, cooldownMs)
     local now = GetGameTimer()
     local playerBuckets = buckets[source]
 
@@ -26,10 +26,10 @@ function FiveFY.RateLimit.Allow(source, key, cooldownMs)
     return true, 0
 end
 
-function FiveFY.RateLimit.Clear(source)
+function FiveFly.RateLimit.Clear(source)
     buckets[source] = nil
 end
 
 AddEventHandler("playerDropped", function()
-    FiveFY.RateLimit.Clear(source)
+    FiveFly.RateLimit.Clear(source)
 end)

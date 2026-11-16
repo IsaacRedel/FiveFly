@@ -5,7 +5,7 @@ import { useT } from "../i18n";
 import type { MessageKey } from "../i18n/en";
 import { durationToSeconds, formatTime } from "../lib/time";
 import { isFavorite } from "../lib/tracks";
-import { useFiveFY } from "../state/store";
+import { useFiveFly } from "../state/store";
 import type { OutputMode } from "../types";
 
 export const OUTPUT_ICONS: Record<OutputMode, IconName> = { prop: "speaker", vehicle: "car", private: "headphones", off: "off" };
@@ -14,7 +14,7 @@ export const OUTPUT_LABELS: Record<OutputMode, MessageKey> = { prop: "output.pro
 /** Seek bar that only commits the new position when the user releases it. */
 export function SeekBar({ compact }: { compact?: boolean }) {
     const t = useT();
-    const { currentTrack, liveProgress, actions } = useFiveFY();
+    const { currentTrack, liveProgress, actions } = useFiveFly();
     const [draft, setDraft] = useState<number | null>(null);
     const draftRef = useRef<number | null>(null);
 
@@ -80,7 +80,7 @@ export function SeekBar({ compact }: { compact?: boolean }) {
 
 export function TransportControls() {
     const t = useT();
-    const { data, isPlaying, playbackBusy, actions } = useFiveFY();
+    const { data, isPlaying, playbackBusy, actions } = useFiveFly();
     const { playback } = data;
 
     return (
@@ -107,7 +107,7 @@ export function TransportControls() {
 
 export function VolumeControl() {
     const t = useT();
-    const { data, actions } = useFiveFY();
+    const { data, actions } = useFiveFly();
     const { audio } = data;
 
     return (
@@ -122,7 +122,7 @@ export function VolumeControl() {
 
 export function PlayerView({ onBack }: { onBack?: () => void }) {
     const t = useT();
-    const { currentTrack, isPlaying, playbackBusy, data, actions } = useFiveFY();
+    const { currentTrack, isPlaying, playbackBusy, data, actions } = useFiveFly();
     const [showVolume, setShowVolume] = useState(false);
     const { audio, playback, library } = data;
 

@@ -1,8 +1,8 @@
 ---@diagnostic disable: lowercase-global
-FiveFY = FiveFY or {}
-FiveFY.Utils = {}
+FiveFly = FiveFly or {}
+FiveFly.Utils = {}
 
-local Utils = FiveFY.Utils
+local Utils = FiveFly.Utils
 
 ---@class Track
 ---@field videoId string YouTube video id, or a station id when streamUrl is set
@@ -217,11 +217,11 @@ function Utils.AttenuatedVolume(distance, range, baseVolume, attenuation)
     return volume * (1.0 - smooth) ^ curve
 end
 
-local resourceName = GetCurrentResourceName and GetCurrentResourceName() or "fivefy"
+local resourceName = GetCurrentResourceName and GetCurrentResourceName() or "fivefly"
 
 --- Prints a log line prefixed with the resource name. "debug" lines only print with Config.Debug.
 ---@param level "debug"|"info"|"warn"|"error"
-function FiveFY.Log(level, message, ...)
+function FiveFly.Log(level, message, ...)
     if level == "debug" and not (Config and Config.Debug) then
         return
     end
