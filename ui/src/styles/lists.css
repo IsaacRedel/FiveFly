@@ -1,0 +1,255 @@
+.sticky-head {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    display: grid;
+    gap: 1rem;
+    margin: -2.5rem -1rem 1.05rem;
+    padding: 2.5rem 1rem 0.85rem;
+    background: var(--bg);
+}
+
+.search-box {
+    display: grid;
+    grid-template-columns: 1.3rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 3rem;
+    padding: 0 0.8rem;
+    border-radius: 0.8rem;
+    background: var(--panel);
+    color: var(--muted);
+}
+
+.search-box svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.search-box input {
+    min-width: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--text);
+}
+
+.search-box input::placeholder {
+    color: #c7c3cd;
+}
+
+.search-results-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 0.85rem;
+    color: var(--muted);
+    font-size: 0.88rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.search-results-head button {
+    min-height: 1.9rem;
+    padding: 0 0.65rem;
+    border: 0.0625rem solid var(--line);
+    border-radius: 999rem;
+    color: var(--accent);
+    font-size: 0.82rem;
+    font-weight: 900;
+}
+
+.empty-state {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    min-height: 26rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+.empty-state-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    border: 0.0625rem solid var(--line);
+    border-radius: 50%;
+    background: var(--panel);
+    color: var(--muted);
+}
+
+.empty-state-icon svg {
+    width: 2rem;
+    height: 2rem;
+}
+
+.empty-state strong {
+    margin-top: 1rem;
+    font-size: 1.12rem;
+}
+
+.empty-state p {
+    max-width: 18rem;
+    margin-top: 0.7rem;
+    font-size: 0.95rem;
+    line-height: 1.45;
+}
+
+.empty-state-action {
+    min-height: 2.45rem;
+    margin-top: 1rem;
+    padding: 0 1rem;
+    border-radius: 999rem;
+    background: var(--accent);
+    color: #1c0d08;
+    font-size: 0.92rem;
+    font-weight: 900;
+    transition: transform 120ms ease, background 140ms ease;
+}
+
+.empty-state-action:active {
+    transform: scale(0.97);
+}
+
+.track-list,
+.library-list {
+    display: grid;
+    gap: 0.78rem;
+    padding: 0 1rem 1rem;
+}
+
+.track-row,
+.library-playlist {
+    display: grid;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+    border-radius: 0.7rem;
+    text-align: left;
+    transition: background 140ms ease, transform 120ms ease;
+}
+
+.track-row {
+    grid-template-columns: 3.5rem minmax(0, 1fr) 2.35rem 2.35rem;
+    gap: 0.75rem;
+    min-height: 3.85rem;
+}
+
+.track-row:hover,
+.library-playlist:hover {
+    background: var(--panel);
+}
+
+.track-row:active,
+.library-playlist:active {
+    transform: scale(0.99);
+}
+
+.track-number {
+    color: var(--muted);
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.track-row.numbered {
+    grid-template-columns: 1.5rem 3rem minmax(0, 1fr) 2.35rem 2.35rem;
+}
+
+.track-copy {
+    min-width: 0;
+}
+
+.track-copy strong {
+    color: var(--text);
+    font-size: 1.02rem;
+    font-weight: 800;
+}
+
+.track-copy.strong strong {
+    font-size: 1.1rem;
+}
+
+.track-copy em {
+    margin-top: 0.22rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-style: normal;
+}
+
+.tab-row {
+    display: flex;
+    gap: 0.55rem;
+}
+
+.tab-row button {
+    min-height: 2rem;
+    padding: 0 0.95rem;
+    border: 0.0625rem solid var(--line);
+    border-radius: 999rem;
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 800;
+    transition: border-color 140ms ease, background 140ms ease, transform 120ms ease;
+}
+
+.tab-row button.active {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: #1c0d08;
+}
+
+.tab-row button:active,
+.create-playlist-button:active {
+    transform: scale(0.97);
+}
+
+.create-playlist-button {
+    justify-self: start;
+    min-height: 2.2rem;
+    padding: 0 0.9rem;
+    border-radius: 999rem;
+    background: var(--panel-strong);
+    color: var(--accent);
+    font-size: 0.92rem;
+    font-weight: 900;
+    transition: transform 120ms ease, background 140ms ease;
+}
+
+.library-action-row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.create-playlist-button.secondary {
+    color: var(--text);
+}
+
+.library-view .track-list,
+.search-view .track-list {
+    padding: 0 0 1rem;
+}
+
+.library-playlist {
+    grid-template-columns: 4rem minmax(0, 1fr);
+    gap: 1rem;
+    min-height: 4.45rem;
+    padding: 0.25rem;
+}
+
+.library-playlist span {
+    min-width: 0;
+}
+
+.library-playlist strong {
+    color: var(--text);
+    font-size: 1.1rem;
+}
+
+.library-playlist em {
+    margin-top: 0.25rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+    font-style: normal;
+}
+

@@ -1,0 +1,16 @@
+# Dependencies and build output (releases include ui/dist)
+ui/node_modules/
+ui/dist/
+
+# Editors and OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local logs and env
+*.log
+.env

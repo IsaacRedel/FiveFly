@@ -1,0 +1,184 @@
+/* Components whose markup changed in the React refactor (buttons are no longer nested inside buttons). */
+
+.artwork--empty {
+    background-image: linear-gradient(145deg, #2a2530, #0f0e12 58%, rgba(255, 107, 74, 0.85));
+}
+
+/* Track rows: main button + like + more as sibling buttons. */
+.track-row {
+    grid-template-columns: minmax(0, 1fr) 2.35rem 2.35rem;
+    gap: 0.25rem;
+}
+
+.track-row.numbered {
+    grid-template-columns: minmax(0, 1fr) 2.35rem 2.35rem;
+}
+
+.track-row:active {
+    transform: none;
+}
+
+.track-row-main {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+    min-height: 3.85rem;
+    padding: 0;
+    text-align: left;
+}
+
+.track-row.numbered .track-row-main {
+    grid-template-columns: 1.5rem 3rem minmax(0, 1fr) auto;
+}
+
+.track-row-main:active {
+    transform: scale(0.99);
+}
+
+.track-duration {
+    display: none;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Quick tiles: main button + optional floating play/pause button. */
+.quick-tile {
+    display: block;
+}
+
+.quick-tile-main {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr);
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+    min-height: 3.45rem;
+    padding: 0;
+    text-align: left;
+}
+
+.quick-tile-action {
+    border: 0;
+    cursor: pointer;
+}
+
+/* Seek bar fill comes from the --progress custom property set inline. */
+.progress-seek {
+    background: linear-gradient(to right, var(--text) 0 var(--progress, 0%), var(--line) var(--progress, 0%) 100%);
+}
+
+.progress-seek:disabled {
+    cursor: default;
+    opacity: 0.6;
+}
+
+.progress-block.compact {
+    display: grid;
+    grid-template-columns: 2.8rem minmax(0, 1fr) 2.8rem;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    margin: 0;
+}
+
+.progress-block.compact .progress-seek {
+    height: 0.9rem;
+}
+
+.progress-time {
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+}
+
+/* Volume slider used in the player popover and the panel bar. */
+.volume-inline {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+.volume-inline input[type="range"] {
+    width: 7rem;
+    accent-color: var(--accent);
+}
+
+.player-volume-popover {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.player-volume-popover .volume-inline input[type="range"] {
+    width: 100%;
+}
+
+.player-volume-popover .volume-inline {
+    flex: 1;
+}
+
+/* Generic sheet header (specific sheets keep their own header rules). */
+.sheet-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.9rem;
+}
+
+.sheet-head div {
+    min-width: 0;
+}
+
+.sheet-head span {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--accent);
+    font-size: 0.82rem;
+    font-weight: 900;
+    letter-spacing: 0.03rem;
+    text-transform: uppercase;
+}
+
+.sheet-head h2 {
+    margin: 0;
+    overflow: hidden;
+    font-size: 1.18rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.input-sheet-form {
+    display: grid;
+    gap: 0.8rem;
+}
+
+.queue-row > button:disabled {
+    cursor: default;
+}
+
+.panel-greeting {
+    margin: 0;
+    font-size: 1.9rem;
+    font-weight: 900;
+    line-height: 1.1;
+}
+
+button:focus-visible,
+input:focus-visible {
+    outline: 0.12rem solid rgba(255, 107, 74, 0.7);
+    outline-offset: 0.12rem;
+}
+
+/* The delete action is icon-only (its label stays available to screen readers through aria-label). */
+.playlist-detail-actions button:last-child span {
+    display: none;
+}
+
+.search-box input:focus-visible {
+    outline: none;
+}

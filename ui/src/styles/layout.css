@@ -1,0 +1,184 @@
+/* Design tokens. Accent: sunset coral; secondary: magenta, used only in the brand mark and gradients. */
+.fivefy-app {
+    --bg: #0c0b0e;
+    --panel: #16141a;
+    --panel-strong: #1f1c24;
+    --line: #2f2b35;
+    --text: #f6f4f8;
+    --muted: #c4c0ca;
+    --accent: #ff6b4a;
+    --accent-strong: #e2502f;
+    --accent-2: #e8437a;
+    --on-accent: #1c0d08;
+    --danger: #ff5a66;
+    --brand-gradient: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.fivefy-screen {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 8.6rem;
+    scrollbar-width: none;
+    animation: view-enter 160ms ease-out;
+}
+
+.fivefy-screen::-webkit-scrollbar,
+.recent-strip::-webkit-scrollbar {
+    display: none;
+}
+
+.fivefy-screen--player {
+    padding-bottom: 4rem;
+    overflow-y: hidden;
+}
+
+.view-stack {
+    min-height: 100%;
+    padding: 2.5rem 1rem 1.2rem;
+}
+
+.mini-player {
+    position: absolute;
+    right: 0.48rem;
+    bottom: 4.35rem;
+    left: 0.48rem;
+    z-index: 8;
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr) 2.4rem 2.4rem;
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 3.65rem;
+    padding: 0.48rem 0.65rem;
+    border: 0.0625rem solid var(--line);
+    border-radius: 0.7rem;
+    background: var(--panel-strong);
+    text-align: left;
+    box-shadow: 0 0.8rem 1.4rem rgba(0, 0, 0, 0.24);
+    animation: mini-player-entry 180ms ease-out;
+    transition: border-color 140ms ease, transform 140ms ease;
+}
+
+.mini-player.is-busy {
+    border-color: rgba(255, 107, 74, 0.52);
+}
+
+.mini-player.is-busy .artwork--mini {
+    animation: player-cover-pulse 1.1s ease-in-out infinite;
+}
+
+.mini-player-open {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.7rem;
+    min-width: 0;
+    padding: 0;
+    text-align: left;
+}
+
+.mini-player {
+    grid-template-columns: minmax(0, 1fr) 2.4rem 2.4rem;
+}
+
+.mini-action {
+    width: 2.4rem;
+    height: 2.4rem;
+}
+
+.mini-action:disabled {
+    opacity: 0.55;
+}
+
+.bottom-nav {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 9;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    justify-items: center;
+    align-items: center;
+    min-height: 4rem;
+    padding: 0.28rem 0.85rem 0.62rem;
+    border-top: 0.0625rem solid var(--line);
+    background: rgba(12, 11, 14, 0.97);
+}
+
+.bottom-nav button {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: 0.18rem;
+    width: clamp(4.15rem, 22vw, 4.85rem);
+    min-height: 3.25rem;
+    border: 0.0625rem solid transparent;
+    border-radius: 1rem;
+    color: var(--muted);
+    transition: border-color 140ms ease, background 140ms ease, color 140ms ease, transform 120ms ease;
+}
+
+.bottom-nav button:active {
+    transform: scale(0.96);
+}
+
+.bottom-nav button.active {
+    border: 0.0625rem solid rgba(255, 107, 74, 0.18);
+    background: rgba(255, 107, 74, 0.1);
+    color: var(--accent);
+}
+
+.bottom-nav span {
+    font-size: 0.92rem;
+    font-weight: 800;
+}
+
+.toast-error,
+.toast-notice {
+    position: absolute;
+    top: auto;
+    right: 1rem;
+    bottom: 8.35rem;
+    left: 1rem;
+    z-index: 30;
+    min-height: 2.5rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: 0.75rem;
+    color: #fff;
+    font-size: 0.92rem;
+    font-weight: 800;
+    text-align: center;
+    box-shadow: 0 0.8rem 1.6rem rgba(0, 0, 0, 0.3);
+    animation: toast-in 160ms ease-out;
+}
+
+.toast-error {
+    background: #ff5a66;
+}
+
+.toast-notice {
+    background: #1f1c24;
+    border: 0.0625rem solid rgba(255, 107, 74, 0.45);
+    color: var(--accent);
+}
+
+.skeleton-row {
+    height: 3.85rem;
+    border-radius: 0.7rem;
+    background: linear-gradient(90deg, #16141a, #1f1c24, #16141a);
+    animation: skeleton-pulse 1.1s infinite linear;
+}
+
+.result-list {
+    display: grid;
+    gap: 0.8rem;
+}
+

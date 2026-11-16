@@ -1,0 +1,227 @@
+.profile-playlists h3 {
+    margin: 0;
+}
+
+.profile-stats-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+}
+
+.profile-stats-row span {
+    min-height: 2.6rem;
+    padding: 0.45rem 0.65rem;
+    border: 0.0625rem solid var(--line);
+    border-radius: 0.72rem;
+    background: var(--panel-strong);
+    color: var(--muted);
+    font-size: 0.82rem;
+}
+
+.profile-stats-row strong {
+    display: block;
+    color: var(--text);
+    font-size: 1.08rem;
+}
+
+.profile-view {
+    display: grid;
+    align-content: start;
+    gap: 1rem;
+    padding-top: 1.45rem;
+}
+
+.profile-topbar {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr) 2.5rem;
+    align-items: center;
+    min-height: 2.7rem;
+}
+
+.profile-topbar > span {
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 900;
+    letter-spacing: 0.08rem;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.profile-hero {
+    display: grid;
+    gap: 0.65rem;
+    padding-bottom: 1rem;
+    border-bottom: 0.0625rem solid var(--line);
+}
+
+.profile-hero-art {
+    width: min(58%, 11.5rem);
+    aspect-ratio: 1;
+    margin: 0 auto 0.35rem;
+}
+
+.profile-hero-art .artwork--large {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.95rem;
+}
+
+.profile-kicker,
+.profile-view .section-title-row span,
+.profile-now-card span {
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 0.06rem;
+    text-transform: uppercase;
+}
+
+.profile-hero h1 {
+    margin: 0;
+    overflow-wrap: anywhere;
+    font-size: 1.7rem;
+    line-height: 1.02;
+}
+
+.profile-hero p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.45;
+}
+
+.profile-view .profile-stats-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0.15rem 0 0;
+}
+
+.profile-view .profile-stats-row span {
+    min-height: 2.85rem;
+    padding: 0.48rem 0.52rem;
+}
+
+.profile-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.profile-now-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 3rem;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 0.0625rem solid var(--line);
+    border-radius: 0.9rem;
+    background: var(--panel-strong);
+}
+
+.profile-now-card div {
+    min-width: 0;
+}
+
+.profile-now-card strong,
+.profile-now-card em {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.profile-now-card strong {
+    margin-top: 0.3rem;
+}
+
+.profile-now-card em {
+    margin-top: 0.12rem;
+    color: var(--muted);
+    font-size: 0.86rem;
+    font-style: normal;
+}
+
+.profile-now-play {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #1c0d08;
+}
+
+.profile-now-play.active {
+    box-shadow: 0 0 1.4rem rgba(255, 107, 74, 0.25);
+}
+
+.profile-public-list {
+    display: grid;
+    gap: 0.55rem;
+}
+
+.profile-playlists {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 0.95rem;
+}
+
+.profile-playlists h3,
+.social-result-list h2 {
+    color: var(--text);
+    font-size: 1.1rem;
+}
+
+.social-result-list {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.social-result-list section {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.social-profile-row {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr) 1.5rem;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 4.2rem;
+    padding: 0.35rem 0.55rem 0.35rem 0.35rem;
+    border-radius: 0.78rem;
+    background: var(--panel-strong);
+    text-align: left;
+    transition: background 140ms ease, transform 120ms ease;
+}
+
+.social-profile-row:active {
+    transform: scale(0.985);
+}
+
+.social-profile-row span {
+    min-width: 0;
+}
+
+.social-profile-row strong,
+.social-profile-row em {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.social-profile-row strong {
+    color: var(--text);
+    font-size: 1.02rem;
+    font-weight: 900;
+}
+
+.social-profile-row em {
+    margin-top: 0.18rem;
+    color: var(--muted);
+    font-size: 0.86rem;
+    font-style: normal;
+}
+

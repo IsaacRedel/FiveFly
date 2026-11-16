@@ -1,0 +1,397 @@
+/*
+ * Desktop panel. In game it is rendered inside #panel-root (engine.html), which stays transparent:
+ * only this window draws a background, so nothing covers the game outside it.
+ * No backdrop-filter here on purpose (CEF compatibility).
+ */
+
+.fivefy-app.is-panel {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: 15.5rem minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) 5.6rem;
+    width: min(74rem, calc(100% - 4rem));
+    height: min(47.5rem, calc(100% - 4rem));
+    margin: auto;
+    overflow: hidden;
+    border: 0.0625rem solid var(--line);
+    border-radius: 1rem;
+    box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.55);
+    animation: panel-in 180ms ease-out;
+}
+
+/* Sidebar */
+.panel-sidebar {
+    grid-row: 1;
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    min-height: 0;
+    padding: 1.25rem 0.75rem 0.75rem;
+    border-right: 0.0625rem solid var(--line);
+    background: #0f0e12;
+}
+
+.panel-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0 0.5rem;
+}
+
+.panel-brand strong {
+    font-size: 1.3rem;
+    font-weight: 900;
+    letter-spacing: -0.01rem;
+}
+
+.panel-brand-mark {
+    position: relative;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.6rem;
+    background: var(--brand-gradient);
+}
+
+.panel-brand-mark::after {
+    position: absolute;
+    inset: 0.55rem 0.5rem;
+    border-top: 0.16rem solid var(--on-accent);
+    border-bottom: 0.16rem solid var(--on-accent);
+    border-radius: 0.2rem;
+    content: "";
+}
+
+.panel-nav {
+    display: grid;
+    gap: 0.2rem;
+}
+
+.panel-nav button {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    width: 100%;
+    min-height: 2.6rem;
+    padding: 0 0.75rem;
+    border-radius: 0.6rem;
+    color: var(--muted);
+    font-size: 0.98rem;
+    font-weight: 800;
+    text-align: left;
+    transition: background 140ms ease, color 140ms ease;
+}
+
+.panel-nav button:hover,
+.panel-nav button.active {
+    background: var(--panel-strong);
+    color: var(--text);
+}
+
+.panel-nav button.active svg {
+    color: var(--accent);
+}
+
+.panel-sidebar-section {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+}
+
+.panel-sidebar-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 2rem;
+    padding: 0.4rem 0.5rem 0.1rem;
+    color: var(--muted);
+    font-size: 0.74rem;
+    font-weight: 900;
+    letter-spacing: 0.05rem;
+    text-transform: uppercase;
+}
+
+.panel-sidebar-title .icon-button {
+    width: 1.8rem;
+    height: 1.8rem;
+}
+
+.panel-sidebar-list {
+    display: grid;
+    gap: 0.1rem;
+}
+
+.panel-sidebar-list button {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.65rem;
+    width: 100%;
+    padding: 0.35rem 0.5rem;
+    border-radius: 0.55rem;
+    text-align: left;
+    transition: background 140ms ease;
+}
+
+.panel-sidebar-list button:hover,
+.panel-sidebar-list button.active {
+    background: var(--panel-strong);
+}
+
+.panel-sidebar-list span {
+    min-width: 0;
+}
+
+.panel-sidebar-list strong,
+.panel-sidebar-list em {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.panel-sidebar-list strong {
+    font-size: 0.92rem;
+    font-weight: 800;
+}
+
+.panel-sidebar-list em {
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-style: normal;
+}
+
+/* Main area */
+.panel-main {
+    position: relative;
+    grid-row: 1;
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    background: linear-gradient(180deg, rgba(255, 107, 74, 0.12), rgba(232, 67, 122, 0.04) 12rem, transparent 22rem), var(--bg);
+}
+
+.panel-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1.25rem 0;
+}
+
+.panel-topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.is-panel .fivefy-screen {
+    position: relative;
+    inset: auto;
+    flex: 1;
+    min-height: 0;
+    padding-bottom: 1.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+}
+
+.is-panel .fivefy-screen--player {
+    overflow-y: auto;
+}
+
+.is-panel .view-stack {
+    padding: 0.75rem 1.75rem 1.5rem;
+}
+
+.is-panel .home-quick-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.is-panel .continue-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.is-panel .library-list {
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+}
+
+.is-panel .track-duration {
+    display: block;
+}
+
+.is-panel .sticky-head {
+    background: transparent;
+}
+
+.is-panel .player-view {
+    max-width: 30rem;
+    height: auto;
+    margin: 0 auto;
+    padding-top: 0.5rem;
+}
+
+.is-panel .player-head {
+    display: none;
+}
+
+.is-panel .playlist-view {
+    padding: 0.5rem 1.75rem 1.5rem;
+    background: transparent;
+}
+
+.is-panel .playlist-hero {
+    border-radius: 1rem;
+}
+
+/* Now playing bar */
+.panel-nowbar {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 1.25rem;
+    padding: 0 1.25rem;
+    border-top: 0.0625rem solid var(--line);
+    background: #0f0e12;
+}
+
+.panel-nowbar.is-empty .panel-nowbar-center,
+.panel-nowbar.is-empty .panel-nowbar-tools .queue-button,
+.panel-nowbar.is-empty .panel-nowbar-tools > .icon-button {
+    opacity: 0.45;
+    pointer-events: none;
+}
+
+.panel-nowbar-track {
+    display: grid;
+    grid-template-columns: 3.4rem minmax(0, 1fr) 2.35rem;
+    align-items: center;
+    gap: 0.8rem;
+    min-width: 0;
+}
+
+.panel-nowbar-cover {
+    padding: 0;
+}
+
+.panel-nowbar-cover .artwork--mini {
+    width: 3.4rem;
+    height: 3.4rem;
+    border-radius: 0.45rem;
+}
+
+.panel-nowbar-idle {
+    grid-column: 1 / -1;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.panel-nowbar-center {
+    display: grid;
+    justify-items: center;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+.panel-nowbar-center .player-controls {
+    gap: 1.1rem;
+    margin: 0;
+    padding: 0;
+}
+
+.panel-nowbar-center .main-play-button {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.panel-nowbar-center .transport-button,
+.panel-nowbar-center .mode-button {
+    width: 2rem;
+    height: 2rem;
+}
+
+.panel-nowbar-tools {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.55rem;
+    min-width: 0;
+}
+
+.panel-nowbar-tools .icon-button.active {
+    color: var(--accent);
+}
+
+.panel-nowbar-tools .output-chip span {
+    max-width: 9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Sheets become centered dialogs; toasts move to the corner. */
+.is-panel .sheet-backdrop {
+    align-items: center;
+    justify-content: center;
+}
+
+.is-panel .sheet {
+    width: min(28rem, 92%);
+    max-height: 85%;
+    overflow-y: auto;
+    border-radius: 1rem;
+    animation: sheet-fade-in 140ms ease-out;
+}
+
+.is-panel .sheet-handle {
+    display: none;
+}
+
+.is-panel .toast-error,
+.is-panel .toast-notice {
+    right: 1.5rem;
+    bottom: 6.6rem;
+    left: auto;
+    width: 22rem;
+}
+
+@keyframes panel-in {
+    from {
+        opacity: 0;
+        transform: translateY(0.6rem) scale(0.99);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media (max-width: 960px) {
+    .fivefy-app.is-panel {
+        grid-template-columns: 4.5rem minmax(0, 1fr);
+    }
+
+    .panel-brand strong,
+    .panel-nav span,
+    .panel-sidebar-section {
+        display: none;
+    }
+
+    .panel-nowbar {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) auto;
+    }
+
+    .panel-nowbar-tools .output-chip span,
+    .panel-nowbar-tools .volume-inline input {
+        display: none;
+    }
+}

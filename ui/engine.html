@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FiveFY Engine</title>
+    <style>
+      /* This page is the resource ui_page and stays loaded for the whole session: keep it transparent
+         and hidden by default. Only the panel window (when open) draws a background. */
+      html, body { background: transparent; margin: 0; width: 100%; height: 100%; overflow: hidden; }
+      #panel-root { display: none; position: fixed; inset: 0; background: transparent; }
+      #panel-root.is-open { display: block; }
+      #youtube-player { position: fixed; left: -9999px; top: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="youtube-player"></div>
+    <div id="panel-root"></div>
+    <script type="module" src="/src/engine/main.ts"></script>
+  </body>
+</html>

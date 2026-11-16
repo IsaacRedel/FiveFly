@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leafo/gh-actions-lua@v10
+        with:
+          luaVersion: "5.4"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+
+      - name: Test
+        run: lua tests/lua/run.lua
+
+      - name: Build UI
+        working-directory: ui
+        run: |
+          npm ci
+          npm run check
+
+      - name: Check manifest version matches the tag
+        run: |
+          version="$(sed -n 's/^version "\(.*\)"/\1/p' fxmanifest.lua)"
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "fxmanifest.lua version ($version) does not match tag ($GITHUB_REF_NAME)"
+            exit 1
+          fi
+
+      - name: Package resource
+        run: |
+          mkdir -p package/fivefy/ui
+          cp -r fxmanifest.lua config.lua LICENSE README.md README.pt-BR.md CHANGELOG.md bridge client server shared sql docs package/fivefy/
+          cp -r ui/dist package/fivefy/ui/dist
+          rm -f package/fivefy/ui/dist/preview.html
+          cd package && zip -r ../fivefy.zip fivefy
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: fivefy.zip
+          generate_release_notes: true

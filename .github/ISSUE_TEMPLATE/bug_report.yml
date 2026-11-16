@@ -1,0 +1,44 @@
+name: Bug report
+description: Something does not work as expected
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the panel
+        2. ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: FiveFY version
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: framework
+    attributes:
+      label: Framework
+      options: [Qbox, QBCore, ESX, vRP, Standalone, Other]
+    validations:
+      required: true
+  - type: input
+    id: phone
+    attributes:
+      label: lb-phone version (if used)
+  - type: textarea
+    id: logs
+    attributes:
+      label: Server and client console output
+      description: Remove keys, IPs and other private data before posting.
+      render: shell

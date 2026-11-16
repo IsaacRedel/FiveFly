@@ -1,0 +1,108 @@
+/* Browser demo page only (preview.html). Not loaded in game. */
+html,
+body,
+#preview-root {
+    min-height: 100%;
+    margin: 0;
+}
+
+body {
+    overflow: auto;
+    background: radial-gradient(circle at 15% 0%, rgba(255, 107, 74, 0.16), transparent 40rem), #08070a;
+    color: #f6f4f8;
+    user-select: auto;
+}
+
+.preview-page {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    justify-items: center;
+    gap: 1.5rem;
+    min-height: 100vh;
+    padding: 1.5rem 1rem 2rem;
+}
+
+.preview-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: min(100%, 74rem);
+}
+
+.preview-title {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.preview-mark {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 0.7rem;
+    background: linear-gradient(135deg, #ff6b4a, #e8437a);
+}
+
+.preview-title h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    line-height: 1;
+}
+
+.preview-title p {
+    margin: 0.25rem 0 0;
+    color: #c4c0ca;
+    font-size: 0.9rem;
+}
+
+.preview-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.preview-toggle {
+    display: inline-flex;
+    padding: 0.2rem;
+    border: 0.0625rem solid #2f2b35;
+    border-radius: 999rem;
+    background: #16141a;
+}
+
+.preview-toggle button {
+    min-height: 2rem;
+    padding: 0 0.9rem;
+    border-radius: 999rem;
+    color: #c4c0ca;
+    font-size: 0.85rem;
+    font-weight: 800;
+}
+
+.preview-toggle button.active {
+    background: #ff6b4a;
+    color: #1c0d08;
+}
+
+.preview-phone {
+    position: relative;
+    width: min(100%, 390px);
+    /* Real lb-phone screen size: views use vh units that refer to the phone frame in game. */
+    height: 844px;
+    overflow: hidden;
+    border: 0.6rem solid #1c1a20;
+    border-radius: 2.6rem;
+    box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.5);
+}
+
+.preview-panel {
+    position: relative;
+    width: min(100%, 78rem);
+    height: min(52rem, calc(100vh - 7rem));
+    min-height: 620px;
+}
+
+.preview-panel .fivefy-app.is-panel {
+    width: 100%;
+    height: 100%;
+}

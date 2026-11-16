@@ -1,0 +1,230 @@
+.artwork {
+    display: block;
+    flex: none;
+    background-position: center;
+    background-size: cover;
+    background-color: #1f1c24;
+}
+
+.artwork--mini {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+}
+
+.artwork--small {
+    width: 3.5rem;
+    height: 3.5rem;
+}
+
+.artwork--medium {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 0.5rem;
+}
+
+.artwork--large {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 0.5rem;
+}
+
+.artwork--tile {
+    width: 7.45rem;
+    height: 7.45rem;
+    border-radius: 0.78rem;
+}
+
+.artwork--list {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 0.5rem;
+}
+
+.artwork--cover {
+    width: min(100%, clamp(12.25rem, 36vh, 18.75rem));
+    aspect-ratio: 1;
+    border-radius: 1rem;
+    box-shadow: 0 1rem 2.6rem rgba(0, 0, 0, 0.42);
+}
+
+.artwork--playlist {
+    width: 12.5rem;
+    height: 12.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 1rem 2.6rem rgba(0, 0, 0, 0.42);
+}
+
+.playlist-cover-button {
+    position: relative;
+    display: block;
+    width: 12.5rem;
+    height: 12.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: 1rem;
+    background: transparent;
+    color: inherit;
+}
+
+.playlist-cover-button::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 0.0625rem solid rgba(255, 255, 255, 0.08);
+    border-radius: inherit;
+    pointer-events: none;
+    transition: border-color 140ms ease, background 140ms ease;
+}
+
+.playlist-cover-button:active {
+    transform: scale(0.985);
+}
+
+.playlist-cover-button:hover::after {
+    border-color: rgba(255, 107, 74, 0.35);
+    background: rgba(255, 107, 74, 0.04);
+}
+
+.smart-cover-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 0.125rem;
+    overflow: hidden;
+    background: #16141a;
+}
+
+.smart-cover-cell {
+    display: block;
+    min-width: 0;
+    min-height: 0;
+    background-position: center;
+    background-size: cover;
+}
+
+.round-action,
+.main-play-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #1c0d08;
+    transition: transform 120ms ease, box-shadow 140ms ease;
+}
+
+.round-action:active,
+.main-play-button:active {
+    transform: scale(0.96);
+}
+
+.round-action {
+    width: 3.25rem;
+    height: 3.25rem;
+}
+
+.main-play-button {
+    width: 4.6rem;
+    height: 4.6rem;
+    box-shadow: 0 0.8rem 1.6rem rgba(255, 107, 74, 0.16);
+}
+
+.main-play-button.is-busy {
+    opacity: 0.82;
+    animation: player-cover-pulse 1.1s ease-in-out infinite;
+}
+
+.transport-button:disabled,
+.main-play-button:disabled {
+    cursor: default;
+}
+
+.transport-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    transition: transform 120ms ease, color 140ms ease;
+}
+
+.transport-button:active,
+.mode-button:active,
+.icon-button:active,
+.mini-action:active,
+.heart-button:active,
+.more-button:active,
+.queue-button:active,
+.sound-toggle:active,
+.volume-mute-button:active {
+    transform: scale(0.92);
+}
+
+.icon-button,
+.mini-action,
+.heart-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-button {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+.heart-button {
+    width: 2.7rem;
+    height: 2.7rem;
+    color: var(--text);
+}
+
+.heart-button.active {
+    color: var(--accent);
+}
+
+.heart-button.active svg path {
+    fill: currentColor;
+}
+
+.heart-button.small {
+    width: 2.4rem;
+    height: 2.4rem;
+}
+
+.more-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.35rem;
+    height: 2.35rem;
+    color: var(--muted);
+}
+
+.output-chip {
+    display: inline-grid;
+    grid-template-columns: 1rem auto;
+    align-items: center;
+    gap: 0.48rem;
+    min-height: 2rem;
+    padding: 0 0.72rem;
+    border: 0.0625rem solid var(--line);
+    border-radius: 999rem;
+    background: var(--panel);
+    color: var(--muted);
+}
+
+.output-chip.active {
+    color: var(--accent);
+}
+
+.output-chip span {
+    font-size: 0.84rem;
+    font-weight: 900;
+}
+
