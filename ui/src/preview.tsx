@@ -33,7 +33,7 @@ function Preview() {
         <main className={`preview-page preview-page--${mode}`}>
             <header className="preview-head">
                 <div className="preview-title">
-                    <span className="preview-mark" aria-hidden="true" />
+                    <img className="preview-mark" src={`${import.meta.env.BASE_URL}icon.svg`} alt="" width="40" height="40" />
                     <div>
                         <h1>FiveFly</h1>
                         <p>{lang === "pt-BR" ? "Demo interativa com dados de exemplo." : "Interactive demo with sample data."}</p>
