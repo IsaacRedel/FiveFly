@@ -156,6 +156,8 @@ export const PREVIEW_INITIAL_STATE: InitialState = {
 };
 
 export const PREVIEW_API_FALLBACKS = {
+    // Release guard: scripts/check-release.mjs fails if this string shows up in a game build.
+    buildMarker: "fivefly-preview-only",
     initialState: PREVIEW_INITIAL_STATE,
     playback: previewPlayback,
     searchTracks(query: string) {

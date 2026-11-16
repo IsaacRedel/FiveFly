@@ -41,10 +41,19 @@ jobs:
       - name: Package resource
         run: |
           mkdir -p package/fivefly/ui
-          cp -r fxmanifest.lua config.lua LICENSE README.md README.pt-BR.md CHANGELOG.md bridge client server shared sql docs package/fivefly/
+          cp -r fxmanifest.lua config.lua LICENSE README.md README.pt-BR.md CHANGELOG.md CHANGELOG.pt-BR.md bridge client server shared sql docs package/fivefly/
+          # Screenshots are only used by the README on GitHub.
+          rm -rf package/fivefly/docs/images
+          # ui/dist is the game build only: the browser demo is built separately (npm run build:preview).
           cp -r ui/dist package/fivefly/ui/dist
-          rm -f package/fivefly/ui/dist/preview.html
+
+      - name: Make sure no preview content is packaged
+        run: node ui/scripts/check-release.mjs package/fivefly
+
+      - name: Zip
+        run: |
           cd package && zip -r ../fivefly.zip fivefly
+          ls -l ../fivefly.zip
 
       - uses: softprops/action-gh-release@v2
         with:

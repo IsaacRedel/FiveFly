@@ -1,6 +1,7 @@
 # Dependencies and build output (releases include ui/dist)
 ui/node_modules/
 ui/dist/
+ui/dist-preview/
 
 # Editors and OS
 .vscode/*

@@ -6,9 +6,11 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
+    "build:preview": "vite build --mode preview",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "check": "npm run typecheck && npm run test && npm run build"
+    "check:release": "node scripts/check-release.mjs dist",
+    "check": "npm run typecheck && npm run test && npm run build && npm run check:release && npm run build:preview"
   },
   "dependencies": {
     "react": "^18.3.1",
