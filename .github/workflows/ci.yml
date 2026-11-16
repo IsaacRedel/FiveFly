@@ -18,7 +18,7 @@ jobs:
         with:
           luaVersion: "5.4"
       - name: Syntax check
-        run: find . -name "*.lua" -not -path "./ui/*" -print0 | xargs -0 -n1 luac -p
+        run: find . -type f -name "*.lua" -not -path "./ui/*" -not -path "./.lua/*" -not -path "./.luarocks/*" -print0 | xargs -0 -n1 luac -p
       - name: Tests
         run: lua tests/lua/run.lua
 
