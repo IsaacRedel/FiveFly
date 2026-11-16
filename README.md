@@ -67,7 +67,7 @@ Everything lives in [`config.lua`](config.lua), with comments. The main settings
 | `Config.Locale` | `"en"` or `"pt-BR"`: language of the UI, console messages, app/key texts and search region. |
 | `Config.Framework` | `"auto"` or a specific adapter. |
 | `Config.RequirePermission` / `Config.Permission` | Restrict the app to a framework permission or ACE. |
-| `Config.Phone` | lb-phone app name, identifier and whether to stop music when the phone item is lost. |
+| `Config.Phone` | App name (also shown inside the UI), icon, lb-phone identifier and whether to stop music when the phone item is lost. |
 | `Config.Panel` | Command, default key and a `CanOpen` hook (e.g. block while handcuffed). |
 | `Config.Search` | Provider (`auto`, `youtube_api`, `scrape`), limits and cache. |
 | `Config.Stations` | Your radio streams. |

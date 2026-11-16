@@ -22,7 +22,7 @@ local function registerApp()
         size = Config.Phone.Size,
         fixBlur = true,
         ui = ("%s/ui/dist/index.html"):format(RESOURCE_NAME),
-        icon = ("https://cfx-nui-%s/ui/dist/icon.svg"):format(RESOURCE_NAME)
+        icon = ("https://cfx-nui-%s/%s"):format(RESOURCE_NAME, Config.Phone.Icon or "ui/dist/icon.svg")
     }
 
     pcall(function()

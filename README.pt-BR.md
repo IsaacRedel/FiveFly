@@ -68,7 +68,7 @@ Tudo fica no [`config.lua`](config.lua), com comentários. As principais opçõe
 | `Config.Locale` | `"en"` ou `"pt-BR"`: idioma da interface, das mensagens do console, dos textos do app e da tecla e da região da busca. |
 | `Config.Framework` | `"auto"` ou um adaptador específico. |
 | `Config.RequirePermission` / `Config.Permission` | Restringe o app a uma permissão do framework ou ACE. |
-| `Config.Phone` | Nome e identificador do app no lb-phone e se a música para quando o jogador perde o celular. |
+| `Config.Phone` | Nome do app (também exibido dentro da interface), ícone, identificador no lb-phone e se a música para quando o jogador perde o celular. |
 | `Config.Panel` | Comando, tecla padrão e um hook `CanOpen` (por exemplo, bloquear quando algemado). |
 | `Config.Search` | Provider (`auto`, `youtube_api`, `scrape`), limites e cache. |
 | `Config.Stations` | Suas rádios. |

@@ -55,10 +55,10 @@ function AudioSheet({ onClose }: { onClose: () => void }) {
 
 function SettingsSheet({ onClose }: { onClose: () => void }) {
     const t = useT();
-    const { data, actions } = useFiveFly();
+    const { data, appName, actions } = useFiveFly();
 
     return (
-        <Sheet className="settings-sheet" kicker="FiveFly" title={t("common.settings")} onClose={onClose}>
+        <Sheet className="settings-sheet" kicker={appName} title={t("common.settings")} onClose={onClose}>
             <div className="settings-output-grid">
                 {OUTPUTS.map((output) => (
                     <button className={data.audio.output === output ? "active" : ""} type="button" key={output} onClick={() => actions.chooseOutput(output)}>

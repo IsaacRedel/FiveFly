@@ -99,7 +99,7 @@ Os rate limits vêm de `Config.RateLimits` (escritas, playback, recomendações)
 
 ### app.get-initial-state
 
-Tudo o que a UI precisa ao abrir: `{ locale, profile, playback: Session, library: { favorites, playlists, history, stations, sharedSessions, friendsListening, recommendations, smartPlaylists, followingProfiles } }`. O client acrescenta `audio: { output, volume, muted }`.
+Tudo o que a UI precisa ao abrir: `{ locale, appName, profile, playback: Session, library: { favorites, playlists, history, stations, sharedSessions, friendsListening, recommendations, smartPlaylists, followingProfiles } }`. `appName` é o `Config.Phone.Name`, exibido na interface. O client acrescenta `audio: { output, volume, muted }`.
 
 ### playback.state.get
 

@@ -28,7 +28,7 @@ const en = {
     "home.stations": "Radio stations",
     "home.madeForYou": "Made for you",
     "home.noSuggestions": "No suggestions yet",
-    "home.noSuggestionsHint": "Play a few tracks so FiveFly can learn your taste.",
+    "home.noSuggestionsHint": "Play a few tracks so {app} can learn your taste.",
     "home.continue": "Keep listening",
     "home.nothingYet": "Nothing here yet",
     "home.nothingYetHint": "Search for a track or create a playlist to pick up later.",
@@ -128,7 +128,7 @@ const en = {
     "settings.clearHistoryHint": "Removes your recently played tracks.",
 
     "profile.title": "Profile",
-    "profile.kicker": "FiveFly profile",
+    "profile.kicker": "{app} profile",
     "profile.ownEmptyBio": "Add a bio to show your music vibe.",
     "profile.emptyBio": "This profile has no bio yet.",
     "profile.playlists": "playlists",
@@ -187,7 +187,7 @@ const en = {
     "playlistCover.title": "Cover from URL",
     "playlistCover.submit": "Save cover",
 
-    "panel.close": "Close FiveFly",
+    "panel.close": "Close {app}",
     "panel.yourPlaylists": "Your playlists",
     "panel.following": "Following",
     "panel.newPlaylist": "New playlist",
@@ -214,7 +214,7 @@ const en = {
     "notice.outputChanged": "Output changed",
     "notice.historyCleared": "History cleared",
 
-    "error.permission_denied": "You don't have permission to use FiveFly.",
+    "error.permission_denied": "You don't have permission to use {app}.",
     "error.rate_limited": "Slow down a little.",
     "error.search_unavailable": "Search is unavailable right now.",
     "error.search_parse_failed": "Search is unavailable right now.",
@@ -238,7 +238,7 @@ const en = {
     "error.profile_not_found": "Profile not found.",
     "error.session_not_found": "This session is no longer playing.",
     "error.identity_unavailable": "Your character is not loaded yet.",
-    "error.database_not_ready": "FiveFly is starting, try again in a moment.",
+    "error.database_not_ready": "{app} is starting, try again in a moment.",
     "error.server_timeout": "The server took too long to answer.",
     "error.engine_error": "Could not play this track.",
     "error.unknown": "Something went wrong ({code})."

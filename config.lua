@@ -43,11 +43,16 @@ Config.Phone = {
     Enabled = true,
     Resource = "lb-phone",
     Identifier = "fivefly",
+    -- EN: Name shown in lb-phone and inside the UI (panel, profile, messages).
+    -- PT: Nome exibido no lb-phone e dentro da interface (painel, perfil, mensagens).
     Name = "FiveFly",
     -- EN: nil = text from Config.Locale. Set a string to override it.
     -- PT: nil = texto do Config.Locale. Defina um texto para substituir.
     Description = nil,
     Developer = "FiveFly",
+    -- EN: App icon, relative to the resource folder (put custom files in ui/public so the build copies them).
+    -- PT: Ícone do app, relativo à pasta do resource (coloque arquivos próprios em ui/public para o build copiar).
+    Icon = "ui/dist/icon.svg",
     DefaultApp = true,
     Size = 24500,
     -- EN: Stop music started from the phone when the player no longer has a phone item (lb-phone HasPhoneItem).

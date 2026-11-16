@@ -12,7 +12,7 @@ import { CurrentView } from "./views";
 
 function Sidebar() {
     const t = useT();
-    const { view, data, selectedPlaylist, actions } = useFiveFly();
+    const { view, data, selectedPlaylist, appName, actions } = useFiveFly();
     const items: Array<{ view: AppView; icon: IconName; label: string }> = [
         { view: "home", icon: "home", label: t("nav.home") },
         { view: "search", icon: "search", label: t("nav.search") },
@@ -23,7 +23,7 @@ function Sidebar() {
         <aside className="panel-sidebar">
             <div className="panel-brand">
                 <span className="panel-brand-mark" aria-hidden="true" />
-                <strong>FiveFly</strong>
+                <strong>{appName}</strong>
             </div>
 
             <nav className="panel-nav">

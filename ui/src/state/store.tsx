@@ -36,7 +36,8 @@ const EMPTY_SOCIAL: SocialSearchResults = { profiles: [], playlists: [] };
 function useFiveFlyStore(origin: UiOrigin) {
     const [data, dispatch] = useReducer(dataReducer, INITIAL_DATA);
     const [locale, setLocale] = useState<Locale>(normalizeLocale(new URLSearchParams(window.location.search).get("lang") || navigator.language));
-    const t = useMemo(() => createTranslator(locale), [locale]);
+    const [appName, setAppName] = useState("FiveFly");
+    const t = useMemo(() => createTranslator(locale, appName), [locale, appName]);
 
     const [view, setView] = useState<AppView>("home");
     const [previousView, setPreviousView] = useState<AppView>("home");
@@ -91,6 +92,10 @@ function useFiveFlyStore(origin: UiOrigin) {
 
             if (response.data.locale) {
                 setLocale(normalizeLocale(response.data.locale));
+            }
+
+            if (response.data.appName) {
+                setAppName(response.data.appName);
             }
 
             dispatch({ type: "initialLoaded", state: response.data });
@@ -634,6 +639,7 @@ function useFiveFlyStore(origin: UiOrigin) {
         origin,
         t,
         locale,
+        appName,
         data: data as DataState,
         currentTrack,
         isPlaying,

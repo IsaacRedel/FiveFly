@@ -63,6 +63,11 @@ describe("i18n", () => {
         expect(translateSection(t, "custom", "Server title")).toBe("Server title");
     });
 
+    it("fills the app name from the server config", () => {
+        expect(createTranslator("pt-BR", "CaliFY")("profile.kicker")).toBe("Perfil CaliFY");
+        expect(createTranslator("en")("panel.close")).toBe("Close FiveFly");
+    });
+
     it("normalizes locales and picks the greeting by hour", () => {
         expect(normalizeLocale("pt")).toBe("pt-BR");
         expect(normalizeLocale("en-US")).toBe("en");

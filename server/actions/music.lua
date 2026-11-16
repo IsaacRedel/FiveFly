@@ -10,6 +10,7 @@ Actions.Register("app.get-initial-state", {
 
         return {
             locale = Config.Locale,
+            appName = Config.Phone.Name or "FiveFly",
             profile = profile,
             playback = FiveFly.Sessions.GetState(ctx.source),
             library = {

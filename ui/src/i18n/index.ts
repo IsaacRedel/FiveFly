@@ -16,15 +16,15 @@ export function normalizeLocale(value: unknown): Locale {
 
 export type Translate = (key: MessageKey, vars?: Record<string, string | number>) => string;
 
-export function createTranslator(locale: Locale): Translate {
+/** `appName` fills the {app} placeholder (Config.Phone.Name, e.g. "FiveFly" or a server's own brand). */
+export function createTranslator(locale: Locale, appName = "FiveFly"): Translate {
     const dictionary = dictionaries[locale] || en;
 
     return (key, vars) => {
         const template = dictionary[key] ?? en[key] ?? key;
+        const values: Record<string, string | number> = { app: appName, ...vars };
 
-        if (!vars) return template;
-
-        return template.replace(/\{(\w+)\}/g, (match, name: string) => (name in vars ? String(vars[name]) : match));
+        return template.replace(/\{(\w+)\}/g, (match, name: string) => (name in values ? String(values[name]) : match));
     };
 }
 

@@ -129,6 +129,7 @@ export type AudioState = {
 
 export type InitialState = {
     locale?: string;
+    appName?: string;
     profile: PlayerProfile;
     playback: PlaybackState;
     library: LibraryState;

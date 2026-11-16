@@ -56,7 +56,7 @@ if Config.Panel.Enabled then
     RegisterCommand(command, Panel.Toggle, false)
 
     if Config.Panel.DefaultKey ~= nil then
-        RegisterKeyMapping(command, Config.Panel.KeyDescription or FiveFly.T("panel.key_description"), "keyboard", Config.Panel.DefaultKey)
+        RegisterKeyMapping(command, Config.Panel.KeyDescription or FiveFly.T("panel.key_description", Config.Phone.Name or "FiveFly"), "keyboard", Config.Panel.DefaultKey)
     end
 
     -- Close when the player dies while the panel is open.

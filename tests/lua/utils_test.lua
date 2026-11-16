@@ -76,10 +76,10 @@ return {
         name = "Lua texts follow Config.Locale with English fallback",
         run = function()
             H.reset()
-            H.eq(FiveFly.T("panel.key_description"), "Open FiveFly", "english")
+            H.eq(FiveFly.T("panel.key_description", "FiveFly"), "Open FiveFly", "english")
 
             Config.Locale = "pt-BR"
-            H.eq(FiveFly.T("panel.key_description"), "Abrir o FiveFly", "portuguese")
+            H.eq(FiveFly.T("panel.key_description", "CaliFY"), "Abrir o CaliFY", "portuguese")
             H.eq(FiveFly.T("log.framework", "qbx"), "framework: qbx", "formatted")
 
             Config.Locale = "pt"

@@ -5,7 +5,7 @@ FiveFly = FiveFly or {}
 local LOCALES <const> = {
     en = {
         ["app.description"] = "Music for your city.",
-        ["panel.key_description"] = "Open FiveFly",
+        ["panel.key_description"] = "Open %s",
 
         ["log.framework"] = "framework: %s",
         ["log.framework_late"] = "framework: %s (started after fivefly)",
@@ -24,7 +24,7 @@ local LOCALES <const> = {
     },
     ["pt-BR"] = {
         ["app.description"] = "Músicas da sua cidade.",
-        ["panel.key_description"] = "Abrir o FiveFly",
+        ["panel.key_description"] = "Abrir o %s",
 
         ["log.framework"] = "framework: %s",
         ["log.framework_late"] = "framework: %s (iniciado depois do fivefly)",
